@@ -118,22 +118,43 @@ mdfind "kMDItemCFBundleIdentifier == 'co.leothesen.GoodeMormingPages'"
 
 Delete everything except the copy in `/Applications`.
 
-## Releasing
+## Contributing and releasing
 
-Publish a release on GitHub with a `v*` tag. That fires `.github/workflows/release.yml`,
-which builds, packages with `ditto`, signs with Sparkle's EdDSA key, writes
-`appcast.xml`, commits it back to `main`, and attaches the app to the release.
-Every running copy notices within a day, or immediately via
-**Goode Morming Pages → Check for Updates…**
+`main` is protected. Everything goes through a pull request.
 
-From the CLI:
-
-```sh
-gh release create v0.2.0 --generate-notes
+```
+branch → PR → CI must pass → merge → release ships automatically
 ```
 
-Note it must be a *release*, not a bare `git push --tags` — the workflow listens
-for `release: published`.
+**On the PR**, `.github/workflows/ci.yml` builds Debug, runs the tests, then
+builds Release and launches it to prove it actually starts. Failures block the
+merge.
+
+**On merge**, `.github/workflows/release.yml` works out the next version, builds,
+tests, smoke-tests, packages with `ditto`, signs with Sparkle's EdDSA key, tags,
+publishes a GitHub release with generated notes, and commits the updated
+`appcast.xml` back to `main`.
+
+### Versioning
+
+The patch number bumps on every merge. To ask for something bigger, put `[minor]`
+or `[major]` in the merge commit message. To merge without shipping, use
+`[skip release]`.
+
+### Two settings this depends on
+
+- **Required status check:** `build-and-test`. Without it the PR gate is
+  decorative.
+- **`github-actions[bot]` must be a bypass actor in the ruleset.** The release
+  commits `appcast.xml` to `main`. If the bot is blocked, the release still
+  publishes but the update feed silently stops advancing, and nobody is offered
+  the new version.
+
+### Why one workflow and not two
+
+The obvious design — merge creates a release, a second workflow builds it — does
+not work. Anything created with `GITHUB_TOKEN` does not trigger further
+workflows, so the build would never start and nothing would say why.
 
 ### Things that will bite
 
