@@ -1,48 +1,88 @@
 name: Release
 
+# Merging to main ships a release.
+#
+# This is deliberately ONE workflow rather than "push to main creates a release,
+# release event builds it". A release created with GITHUB_TOKEN does not trigger
+# other workflows, so that chain would silently do nothing at all.
 on:
-  # Fires when you publish a release in the GitHub UI, which is the whole point.
-  # WalkingPad triggers on `push: tags`, which does *not* reliably run when a
-  # release is created through the web interface.
-  release:
-    types: [published]
+  push:
+    branches: [main]
 
-  # Manual re-run for an existing tag, e.g. when a release job failed halfway.
+  # Re-run a failed release without an empty commit.
   workflow_dispatch:
     inputs:
-      tag:
-        description: "Existing tag to build, e.g. v0.1.1"
-        required: true
+      version:
+        description: "Version to build, e.g. 0.2.0. Leave blank to bump the patch."
+        required: false
 
 permissions:
   contents: write
 
+concurrency:
+  # Two merges in quick succession would otherwise race on the tag and on the
+  # appcast commit.
+  group: release
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: macos-26
+    # The bot's own appcast commit lands on main and would otherwise start a
+    # second release, which would start a third.
+    if: "!contains(github.event.head_commit.message, '[skip release]')"
 
     steps:
-      - name: Resolve tag
-        id: tag
-        run: |
-          TAG="${{ github.event.release.tag_name || inputs.tag }}"
-          if [ -z "$TAG" ]; then echo "::error::no tag resolved"; exit 1; fi
-          echo "tag=$TAG"            >> "$GITHUB_OUTPUT"
-          echo "version=${TAG#v}"    >> "$GITHUB_OUTPUT"
-
       - uses: actions/checkout@v5
         with:
-          ref: ${{ steps.tag.outputs.tag }}
           fetch-depth: 0
 
-      - name: Stamp version from the tag
+      - name: Work out the next version
+        id: version
         run: |
-          V="${{ steps.tag.outputs.version }}"
+          EXPLICIT="${{ inputs.version }}"
+          if [ -n "$EXPLICIT" ]; then
+            echo "version=$EXPLICIT" >> "$GITHUB_OUTPUT"
+            echo "tag=v$EXPLICIT"    >> "$GITHUB_OUTPUT"
+            echo "explicit version $EXPLICIT"
+            exit 0
+          fi
+
+          LATEST=$(git tag --list 'v*' --sort=-v:refname | head -1)
+          LATEST=${LATEST:-v0.0.0}
+          BASE=${LATEST#v}
+          MAJOR=$(echo "$BASE" | cut -d. -f1)
+          MINOR=$(echo "$BASE" | cut -d. -f2)
+          PATCH=$(echo "$BASE" | cut -d. -f3)
+
+          # A commit can ask for a bigger bump; patch is the default.
+          MESSAGE=$(git log -1 --pretty=%B)
+          case "$MESSAGE" in
+            *"[major]"*) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+            *"[minor]"*) MINOR=$((MINOR + 1)); PATCH=0 ;;
+            *)           PATCH=$((PATCH + 1)) ;;
+          esac
+
+          V="$MAJOR.$MINOR.$PATCH"
+          echo "version=$V"  >> "$GITHUB_OUTPUT"
+          echo "tag=v$V"     >> "$GITHUB_OUTPUT"
+          echo "$LATEST -> v$V"
+
+      - name: Stamp the version
+        run: |
+          V="${{ steps.version.outputs.version }}"
           sed -i '' "s/MARKETING_VERSION = .*;/MARKETING_VERSION = $V;/g" \
             GoodeMormingPages.xcodeproj/project.pbxproj
           sed -i '' "s/CURRENT_PROJECT_VERSION = .*;/CURRENT_PROJECT_VERSION = $V;/g" \
             GoodeMormingPages.xcodeproj/project.pbxproj
-          grep -m1 "MARKETING_VERSION" GoodeMormingPages.xcodeproj/project.pbxproj
+
+      - name: Test
+        run: |
+          xcodebuild -scheme GoodeMormingPages \
+            -configuration Debug \
+            -destination "platform=macOS,arch=arm64" \
+            CODE_SIGN_IDENTITY="-" \
+            -quiet test
 
       - name: Build (Release)
         run: |
@@ -58,15 +98,11 @@ jobs:
           APP="build/Build/Products/Release/GoodeMormingPages.app"
 
           # "BUILD SUCCEEDED" says nothing about whether the thing runs. v0.1.1
-          # built, signed, published — and died at launch because ad-hoc signing
-          # plus hardened runtime blocks loading Sparkle.framework.
+          # built, signed, published — and died at launch.
           codesign -d --entitlements - "$APP" 2>&1 \
             | grep -q "disable-library-validation" \
             || { echo "::error::library validation is on; the app will not load Sparkle"; exit 1; }
 
-          # Run it briefly and check it got past dyld. A GUI failure on a
-          # headless runner looks different from a link failure, so this stays
-          # meaningful without a window server.
           "$APP/Contents/MacOS/GoodeMormingPages" > /tmp/smoke.log 2>&1 &
           PID=$!
           sleep 5
@@ -87,7 +123,6 @@ jobs:
           ditto -c -k --sequesterRsrc --keepParent \
             "build/Build/Products/Release/GoodeMormingPages.app" \
             "assets/GoodeMormingPages.zip"
-          ls -la assets
 
       - name: Fetch Sparkle tools
         run: |
@@ -113,39 +148,52 @@ jobs:
           # go subtly wrong when the XML is assembled by hand.
           /tmp/sparkle/bin/generate_appcast \
             --ed-key-file "$KEY_FILE" \
-            --download-url-prefix "https://github.com/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag }}/" \
+            --download-url-prefix "https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.tag }}/" \
             --link "https://github.com/${{ github.repository }}" \
             -o appcast.xml \
             assets/
 
           rm -f "$KEY_FILE"
-          echo "--- appcast.xml ---"
           cat appcast.xml
 
-      - name: Upload the app to the release
+      - name: Tag and publish the release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release upload "${{ steps.tag.outputs.tag }}" \
-            assets/GoodeMormingPages.zip --clobber
+          TAG="${{ steps.version.outputs.tag }}"
+
+          # Tag only once everything above has passed, so a failed build never
+          # leaves a dangling tag behind.
+          git tag "$TAG" "${{ github.sha }}"
+          git push origin "$TAG"
+
+          PREVIOUS=$(git tag --list 'v*' --sort=-v:refname | sed -n '2p')
+          if [ -n "$PREVIOUS" ]; then
+            gh release create "$TAG" assets/GoodeMormingPages.zip \
+              --title "$TAG" --generate-notes --notes-start-tag "$PREVIOUS"
+          else
+            gh release create "$TAG" assets/GoodeMormingPages.zip \
+              --title "$TAG" --generate-notes
+          fi
 
       - name: Publish appcast to main
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # NOTE: main is protected. github-actions[bot] must be a bypass actor
+          # in the ruleset or this push is rejected and the update feed goes
+          # stale while the release itself looks fine.
           cp appcast.xml /tmp/appcast.xml
-
-          # Drop the build-time version stamp before switching branches.
           git checkout -- .
           git fetch origin main
           git checkout main
-
           cp /tmp/appcast.xml appcast.xml
-          V="${{ steps.tag.outputs.version }}"
+
+          V="${{ steps.version.outputs.version }}"
           sed -i '' "s/MARKETING_VERSION: .*/MARKETING_VERSION: $V/" project.yml
+          sed -i '' "s/CURRENT_PROJECT_VERSION: .*/CURRENT_PROJECT_VERSION: $V/" project.yml
           sed -i '' "s/MARKETING_VERSION = .*;/MARKETING_VERSION = $V;/g" \
             GoodeMormingPages.xcodeproj/project.pbxproj
-          sed -i '' "s/CURRENT_PROJECT_VERSION: .*/CURRENT_PROJECT_VERSION: $V/" project.yml
           sed -i '' "s/CURRENT_PROJECT_VERSION = .*;/CURRENT_PROJECT_VERSION = $V;/g" \
             GoodeMormingPages.xcodeproj/project.pbxproj
 
@@ -156,7 +204,8 @@ jobs:
           if git diff --cached --quiet; then
             echo "nothing to publish"
           else
-            git commit -m "chore: appcast and version for ${{ steps.tag.outputs.tag }}"
+            # [skip release] stops this commit starting another release.
+            git commit -m "chore: appcast and version for ${{ steps.version.outputs.tag }} [skip release]"
             git push origin main
           fi
 
@@ -167,15 +216,13 @@ jobs:
           URL="https://raw.githubusercontent.com/${{ github.repository }}/main/appcast.xml"
           for i in 1 2 3 4 5; do
             CODE=$(curl -s -o /tmp/feed.xml -w "%{http_code}" "$URL")
-            if [ "$CODE" = "200" ]; then
-              echo "feed reachable"
+            if [ "$CODE" = "200" ] && grep -q "${{ steps.version.outputs.version }}" /tmp/feed.xml; then
               grep -q "sparkle:edSignature" /tmp/feed.xml \
-                && echo "feed is signed" \
+                && { echo "feed is live and signed"; exit 0; } \
                 || { echo "::error::feed has no signature"; exit 1; }
-              exit 0
             fi
             echo "attempt $i: HTTP $CODE, waiting for raw CDN"
             sleep 10
           done
-          echo "::error::appcast not reachable at $URL"
+          echo "::error::appcast did not update at $URL"
           exit 1
