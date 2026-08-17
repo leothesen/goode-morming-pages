@@ -1,0 +1,519 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1519150A4EA6209AA0E1D0B2 /* BufferStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F926760E71EEAA8552664A /* BufferStore.swift */; };
+		1CA432AB4D31A708DF62813C /* SyncSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58DFC187E7392C5A6FC82CC /* SyncSheet.swift */; };
+		2FE753E38DB71D3CD16B44D6 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E56BEB8D674B4B2F237C28C /* App.swift */; };
+		32A54AD6F7374549122AE2B1 /* EditorLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AB76708696AC3FBB1AB58D /* EditorLogicTests.swift */; };
+		3A7902D31B4AA7E0ECEA5C90 /* ChromeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0310D7FCD841FCB750D9C3 /* ChromeViews.swift */; };
+		5119F2E50C83AD23D64A93D2 /* EditorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A53E4D1AAC2605CD8634789 /* EditorModel.swift */; };
+		5DD35B919FC7B43E3FFDF76C /* WordCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0664841CB25F3779A2A1CF7 /* WordCount.swift */; };
+		622C75DD3358B11CA87A6B27 /* NotionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848CC1E2A8024798FEBB8CA /* NotionClient.swift */; };
+		6463E0012C6DC3375DCBE27B /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6DDF780273BAFE9362B23E /* Metrics.swift */; };
+		6F4DADCBC64C0338F711A175 /* BlockBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E01422E41E16063B908300 /* BlockBuilderTests.swift */; };
+		6FEC02A3CDEFFB59A2B1B0C2 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFE16AA69EB1D613E6B7D91 /* Preferences.swift */; };
+		800438E0EBDC2A3DEE223E40 /* ScrimOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818A4F1E51F26F549AD0D3ED /* ScrimOverlay.swift */; };
+		8B8EC62BB0E326D8CAC820C0 /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4003B1870C5DF494CA3598B /* SyncService.swift */; };
+		8E7375E39942F8ACD3FAF6B4 /* BlockBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446D740E0C63E391315D9DED /* BlockBuilder.swift */; };
+		9F362F31A0515A7DFE51781A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2AFB7EDE10E887E7C96987 /* SettingsView.swift */; };
+		A40669AE894750B7FDAF2402 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAAA1303B7A99A4AC3E1FA /* Keychain.swift */; };
+		BEEFBFBE5D51517B62E3CF2F /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413449A81F88616FDA185E5A /* EditorView.swift */; };
+		C2F21ED5D0FCA7195D5FBCA3 /* ScrimTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B0C9BF7FEA82A64C46435 /* ScrimTextView.swift */; };
+		F688FA2764745059A575CA82 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497A9B917EEB39FBCAD594F6 /* Theme.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5ADB8E46617435F238DD5324 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A6864991045EC0222697E592 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9DCA754BFBBBB54BFB6C615D;
+			remoteInfo = GoodeMormingPages;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		36E01422E41E16063B908300 /* BlockBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockBuilderTests.swift; sourceTree = "<group>"; };
+		413449A81F88616FDA185E5A /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+		446D740E0C63E391315D9DED /* BlockBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockBuilder.swift; sourceTree = "<group>"; };
+		497A9B917EEB39FBCAD594F6 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		6D2AFB7EDE10E887E7C96987 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		72EB331FEAC60CF036E68A2B /* GoodeMormingPagesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GoodeMormingPagesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CFE16AA69EB1D613E6B7D91 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		818A4F1E51F26F549AD0D3ED /* ScrimOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrimOverlay.swift; sourceTree = "<group>"; };
+		8203F4B50E6D292038770CDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8E56BEB8D674B4B2F237C28C /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		9A53E4D1AAC2605CD8634789 /* EditorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorModel.swift; sourceTree = "<group>"; };
+		9B0310D7FCD841FCB750D9C3 /* ChromeViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChromeViews.swift; sourceTree = "<group>"; };
+		A2BAAA1303B7A99A4AC3E1FA /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		B0664841CB25F3779A2A1CF7 /* WordCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordCount.swift; sourceTree = "<group>"; };
+		B2F926760E71EEAA8552664A /* BufferStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferStore.swift; sourceTree = "<group>"; };
+		C350353AE9277625D36FC0D0 /* GoodeMormingPages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoodeMormingPages.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF6DDF780273BAFE9362B23E /* Metrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
+		D71B0C9BF7FEA82A64C46435 /* ScrimTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrimTextView.swift; sourceTree = "<group>"; };
+		D848CC1E2A8024798FEBB8CA /* NotionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionClient.swift; sourceTree = "<group>"; };
+		D8AB76708696AC3FBB1AB58D /* EditorLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorLogicTests.swift; sourceTree = "<group>"; };
+		E58DFC187E7392C5A6FC82CC /* SyncSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSheet.swift; sourceTree = "<group>"; };
+		F4003B1870C5DF494CA3598B /* SyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0D981C4386FE2B113E001FEA /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				B2F926760E71EEAA8552664A /* BufferStore.swift */,
+				A2BAAA1303B7A99A4AC3E1FA /* Keychain.swift */,
+				CF6DDF780273BAFE9362B23E /* Metrics.swift */,
+				7CFE16AA69EB1D613E6B7D91 /* Preferences.swift */,
+				497A9B917EEB39FBCAD594F6 /* Theme.swift */,
+				B0664841CB25F3779A2A1CF7 /* WordCount.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		141152BFD7E8AECF3FB7C381 /* GoodeMormingPagesTests */ = {
+			isa = PBXGroup;
+			children = (
+				36E01422E41E16063B908300 /* BlockBuilderTests.swift */,
+				D8AB76708696AC3FBB1AB58D /* EditorLogicTests.swift */,
+			);
+			path = GoodeMormingPagesTests;
+			sourceTree = "<group>";
+		};
+		249878FAFB0FA8857B4AC315 = {
+			isa = PBXGroup;
+			children = (
+				5B1E80788786A1DD68A220F2 /* GoodeMormingPages */,
+				141152BFD7E8AECF3FB7C381 /* GoodeMormingPagesTests */,
+				42A8450BE9706B61A10F7564 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3F166799C5B27660756ADD00 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				9A53E4D1AAC2605CD8634789 /* EditorModel.swift */,
+				413449A81F88616FDA185E5A /* EditorView.swift */,
+				818A4F1E51F26F549AD0D3ED /* ScrimOverlay.swift */,
+				D71B0C9BF7FEA82A64C46435 /* ScrimTextView.swift */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		42A8450BE9706B61A10F7564 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C350353AE9277625D36FC0D0 /* GoodeMormingPages.app */,
+				72EB331FEAC60CF036E68A2B /* GoodeMormingPagesTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		47F9534AB30F971DCACA8CDC /* Chrome */ = {
+			isa = PBXGroup;
+			children = (
+				9B0310D7FCD841FCB750D9C3 /* ChromeViews.swift */,
+			);
+			path = Chrome;
+			sourceTree = "<group>";
+		};
+		5B1E80788786A1DD68A220F2 /* GoodeMormingPages */ = {
+			isa = PBXGroup;
+			children = (
+				47F9534AB30F971DCACA8CDC /* Chrome */,
+				0D981C4386FE2B113E001FEA /* Core */,
+				3F166799C5B27660756ADD00 /* Editor */,
+				665129E828664A8B44A7F731 /* Notion */,
+				8D66DFFE8A8BA8CB0F942F39 /* Settings */,
+				9005BC930F114360685D5AA2 /* Sync */,
+				8E56BEB8D674B4B2F237C28C /* App.swift */,
+				8203F4B50E6D292038770CDB /* Info.plist */,
+			);
+			path = GoodeMormingPages;
+			sourceTree = "<group>";
+		};
+		665129E828664A8B44A7F731 /* Notion */ = {
+			isa = PBXGroup;
+			children = (
+				446D740E0C63E391315D9DED /* BlockBuilder.swift */,
+				D848CC1E2A8024798FEBB8CA /* NotionClient.swift */,
+				F4003B1870C5DF494CA3598B /* SyncService.swift */,
+			);
+			path = Notion;
+			sourceTree = "<group>";
+		};
+		8D66DFFE8A8BA8CB0F942F39 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				6D2AFB7EDE10E887E7C96987 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		9005BC930F114360685D5AA2 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				E58DFC187E7392C5A6FC82CC /* SyncSheet.swift */,
+			);
+			path = Sync;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		315EC411D98E33DDD66A8E28 /* GoodeMormingPagesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 38E64776EDD9B0694A931559 /* Build configuration list for PBXNativeTarget "GoodeMormingPagesTests" */;
+			buildPhases = (
+				C2F34109B7EDCB7441EB45AC /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				73D6696EDDA643B83AEDE41B /* PBXTargetDependency */,
+			);
+			name = GoodeMormingPagesTests;
+			packageProductDependencies = (
+			);
+			productName = GoodeMormingPagesTests;
+			productReference = 72EB331FEAC60CF036E68A2B /* GoodeMormingPagesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		9DCA754BFBBBB54BFB6C615D /* GoodeMormingPages */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 33B8D49054397E7E8C7B757F /* Build configuration list for PBXNativeTarget "GoodeMormingPages" */;
+			buildPhases = (
+				A211DDEF0ED8231065B60D0A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GoodeMormingPages;
+			packageProductDependencies = (
+			);
+			productName = GoodeMormingPages;
+			productReference = C350353AE9277625D36FC0D0 /* GoodeMormingPages.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A6864991045EC0222697E592 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					315EC411D98E33DDD66A8E28 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+					9DCA754BFBBBB54BFB6C615D = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = F11FAC1B5A17A203DA9A251F /* Build configuration list for PBXProject "GoodeMormingPages" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 249878FAFB0FA8857B4AC315;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 42A8450BE9706B61A10F7564 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9DCA754BFBBBB54BFB6C615D /* GoodeMormingPages */,
+				315EC411D98E33DDD66A8E28 /* GoodeMormingPagesTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A211DDEF0ED8231065B60D0A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2FE753E38DB71D3CD16B44D6 /* App.swift in Sources */,
+				8E7375E39942F8ACD3FAF6B4 /* BlockBuilder.swift in Sources */,
+				1519150A4EA6209AA0E1D0B2 /* BufferStore.swift in Sources */,
+				3A7902D31B4AA7E0ECEA5C90 /* ChromeViews.swift in Sources */,
+				5119F2E50C83AD23D64A93D2 /* EditorModel.swift in Sources */,
+				BEEFBFBE5D51517B62E3CF2F /* EditorView.swift in Sources */,
+				A40669AE894750B7FDAF2402 /* Keychain.swift in Sources */,
+				6463E0012C6DC3375DCBE27B /* Metrics.swift in Sources */,
+				622C75DD3358B11CA87A6B27 /* NotionClient.swift in Sources */,
+				6FEC02A3CDEFFB59A2B1B0C2 /* Preferences.swift in Sources */,
+				800438E0EBDC2A3DEE223E40 /* ScrimOverlay.swift in Sources */,
+				C2F21ED5D0FCA7195D5FBCA3 /* ScrimTextView.swift in Sources */,
+				9F362F31A0515A7DFE51781A /* SettingsView.swift in Sources */,
+				8B8EC62BB0E326D8CAC820C0 /* SyncService.swift in Sources */,
+				1CA432AB4D31A708DF62813C /* SyncSheet.swift in Sources */,
+				F688FA2764745059A575CA82 /* Theme.swift in Sources */,
+				5DD35B919FC7B43E3FFDF76C /* WordCount.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C2F34109B7EDCB7441EB45AC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F4DADCBC64C0338F711A175 /* BlockBuilderTests.swift in Sources */,
+				32A54AD6F7374549122AE2B1 /* EditorLogicTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		73D6696EDDA643B83AEDE41B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9DCA754BFBBBB54BFB6C615D /* GoodeMormingPages */;
+			targetProxy = 5ADB8E46617435F238DD5324 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5303AF540DE7A24E103143EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = GoodeMormingPages/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.leothesen.GoodeMormingPages;
+				PRODUCT_NAME = "Goode Morming Pages";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		557DCDB15C9AB684A5CDBA24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = GoodeMormingPages/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = co.leothesen.GoodeMormingPages;
+				PRODUCT_NAME = "Goode Morming Pages";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		B5B09563537705349094BB5D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = co.leothesen.GoodeMormingPagesTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GoodeMormingPages.app/Contents/MacOS/GoodeMormingPages";
+			};
+			name = Debug;
+		};
+		E72F609CF16873B4ED99A0A0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F1A185A3D1D11A4DDA99BE8F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FEDFA65AC4FA585C13F6B9A9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = co.leothesen.GoodeMormingPagesTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GoodeMormingPages.app/Contents/MacOS/GoodeMormingPages";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		33B8D49054397E7E8C7B757F /* Build configuration list for PBXNativeTarget "GoodeMormingPages" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5303AF540DE7A24E103143EB /* Debug */,
+				557DCDB15C9AB684A5CDBA24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		38E64776EDD9B0694A931559 /* Build configuration list for PBXNativeTarget "GoodeMormingPagesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5B09563537705349094BB5D /* Debug */,
+				FEDFA65AC4FA585C13F6B9A9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F11FAC1B5A17A203DA9A251F /* Build configuration list for PBXProject "GoodeMormingPages" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1A185A3D1D11A4DDA99BE8F /* Debug */,
+				E72F609CF16873B4ED99A0A0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A6864991045EC0222697E592 /* Project object */;
+}
