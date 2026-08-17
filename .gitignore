@@ -1,0 +1,10 @@
+.DS_Store
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+
+# The generated project IS committed, so CI needs no extra tooling.
+# project.yml remains the source of truth: edit it, then `xcodegen generate`.

@@ -294,7 +294,7 @@
 				INFOPLIST_FILE = GoodeMormingPages/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.leothesen.GoodeMormingPages;
-				PRODUCT_NAME = "Goode Morming Pages";
+				PRODUCT_NAME = GoodeMormingPages;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -307,7 +307,7 @@
 				INFOPLIST_FILE = GoodeMormingPages/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.leothesen.GoodeMormingPages;
-				PRODUCT_NAME = "Goode Morming Pages";
+				PRODUCT_NAME = GoodeMormingPages;
 				SDKROOT = macosx;
 			};
 			name = Release;

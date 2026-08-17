@@ -1,5 +1,5 @@
 import XCTest
-@testable import Goode_Morming_Pages
+@testable import GoodeMormingPages
 
 final class WordCountTests: XCTestCase {
 

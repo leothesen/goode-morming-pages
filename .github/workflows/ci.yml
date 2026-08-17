@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    # macos-26, not macos-15. The app targets Liquid Glass APIs that do not
+    # exist in Xcode 16, and GitHub ships one major Xcode per macOS image —
+    # so there is deliberately no xcode-select step here.
+    runs-on: macos-26
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: xcodebuild -version && swift --version
+
+      - name: Build
+        run: |
+          xcodebuild -scheme GoodeMormingPages \
+            -configuration Debug \
+            -destination "platform=macOS,arch=arm64" \
+            CODE_SIGN_IDENTITY="-" \
+            -quiet build
+
+      - name: Test
+        run: |
+          xcodebuild -scheme GoodeMormingPages \
+            -configuration Debug \
+            -destination "platform=macOS,arch=arm64" \
+            CODE_SIGN_IDENTITY="-" \
+            -quiet test

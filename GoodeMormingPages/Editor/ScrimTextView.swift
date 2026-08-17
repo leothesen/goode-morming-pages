@@ -18,7 +18,7 @@ final class EditorTextView: NSTextView {
 /// same way as the CSS it came from.
 final class PinnedTextHost: NSView {
     let textView: EditorTextView
-    private let layout = NSLayoutManager()
+    private let textLayout = NSLayoutManager()
     private let storage = NSTextStorage()
     private let container = NSTextContainer(
         size: NSSize(width: 0, height: CGFloat.greatestFiniteMagnitude)
@@ -27,8 +27,8 @@ final class PinnedTextHost: NSView {
     override var isFlipped: Bool { true }
 
     init(theme: Theme) {
-        storage.addLayoutManager(layout)
-        layout.addTextContainer(container)
+        storage.addLayoutManager(textLayout)
+        textLayout.addTextContainer(container)
         container.lineFragmentPadding = 0
         container.widthTracksTextView = false
 
@@ -114,9 +114,9 @@ final class PinnedTextHost: NSView {
             width: max(1, bounds.width - Metrics.horizontalPadding * 2),
             height: CGFloat.greatestFiniteMagnitude
         )
-        layout.ensureLayout(for: container)
+        textLayout.ensureLayout(for: container)
 
-        let used = layout.usedRect(for: container).height
+        let used = textLayout.usedRect(for: container).height
         textView.frame.size.height = max(used + Metrics.lineHeight, Metrics.windowHeight)
         textView.frame.origin = NSPoint(
             x: 0,
@@ -136,16 +136,16 @@ final class PinnedTextHost: NSView {
         if caret == text.length,
            let scalar = text.substring(from: text.length - 1).unicodeScalars.first,
            CharacterSet.newlines.contains(scalar),
-           layout.extraLineFragmentTextContainer != nil {
-            return layout.extraLineFragmentRect.maxY
+           textLayout.extraLineFragmentTextContainer != nil {
+            return textLayout.extraLineFragmentRect.maxY
         }
 
         let charIndex = caret == text.length ? max(0, caret - 1) : caret
         let glyph = min(
-            layout.glyphIndexForCharacter(at: charIndex),
-            max(0, layout.numberOfGlyphs - 1)
+            textLayout.glyphIndexForCharacter(at: charIndex),
+            max(0, textLayout.numberOfGlyphs - 1)
         )
-        return layout.lineFragmentRect(forGlyphAt: glyph, effectiveRange: nil).maxY
+        return textLayout.lineFragmentRect(forGlyphAt: glyph, effectiveRange: nil).maxY
     }
 }
 
