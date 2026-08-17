@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>GoodeMormingPages</title>
+        <item>
+            <title>0.1.1</title>
+            <pubDate>Mon, 17 Aug 2026 09:41:17 +0000</pubDate>
+            <link>https://github.com/leothesen/goode-morming-pages</link>
+            <sparkle:version>0.1.1</sparkle:version>
+            <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/leothesen/goode-morming-pages/releases/download/v0.1.1/GoodeMormingPages.zip" length="1320992" type="application/octet-stream" sparkle:edSignature="n4Oa6mkC1DMgioIeja6m2hxtLCw3si/ERO+DCs2QlwKW/SBfkvO7rYGosKldxNfXisku/q4kEbFjRzhN3tEFDw=="/>
+        </item>
+    </channel>
+</rss>
