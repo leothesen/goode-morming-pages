@@ -3,6 +3,15 @@
     <channel>
         <title>GoodeMormingPages</title>
         <item>
+            <title>0.1.5</title>
+            <pubDate>Mon, 17 Aug 2026 18:25:59 +0000</pubDate>
+            <link>https://github.com/leothesen/goode-morming-pages</link>
+            <sparkle:version>0.1.5</sparkle:version>
+            <sparkle:shortVersionString>0.1.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/leothesen/goode-morming-pages/releases/download/v0.1.5/GoodeMormingPages.zip" length="1654223" type="application/octet-stream" sparkle:edSignature="QvGWCuoCd9bhXklcsWj+dL0zWVEn86DABCdOLlJa+WvY7YdHNciraxM4cxjSKOe7DPEj8Fk8SA6uow4Sh+bFAw=="/>
+        </item>
+        <item>
             <title>0.1.3</title>
             <pubDate>Mon, 17 Aug 2026 10:42:28 +0000</pubDate>
             <link>https://github.com/leothesen/goode-morming-pages</link>
@@ -19,15 +28,6 @@
             <sparkle:shortVersionString>0.1.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
             <enclosure url="https://github.com/leothesen/goode-morming-pages/releases/download/v0.1.2/GoodeMormingPages.zip" length="1321051" type="application/octet-stream" sparkle:edSignature="OBFbJ+mIZuUviyPRfhtl2n4pUvPxxUnP0xefzr5eCH7VJ2vB0PGlN8ATpQOlK0faMdm5Cr1pInzOvqpSGIx/BA=="/>
-        </item>
-        <item>
-            <title>0.1.1</title>
-            <pubDate>Mon, 17 Aug 2026 09:41:17 +0000</pubDate>
-            <link>https://github.com/leothesen/goode-morming-pages</link>
-            <sparkle:version>0.1.1</sparkle:version>
-            <sparkle:shortVersionString>0.1.1</sparkle:shortVersionString>
-            <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
-            <enclosure url="https://github.com/leothesen/goode-morming-pages/releases/download/v0.1.1/GoodeMormingPages.zip" length="1320992" type="application/octet-stream" sparkle:edSignature="n4Oa6mkC1DMgioIeja6m2hxtLCw3si/ERO+DCs2QlwKW/SBfkvO7rYGosKldxNfXisku/q4kEbFjRzhN3tEFDw=="/>
         </item>
     </channel>
 </rss>
