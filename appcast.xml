@@ -3,6 +3,15 @@
     <channel>
         <title>GoodeMormingPages</title>
         <item>
+            <title>0.1.2</title>
+            <pubDate>Mon, 17 Aug 2026 09:57:04 +0000</pubDate>
+            <link>https://github.com/leothesen/goode-morming-pages</link>
+            <sparkle:version>0.1.2</sparkle:version>
+            <sparkle:shortVersionString>0.1.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>26.0</sparkle:minimumSystemVersion>
+            <enclosure url="https://github.com/leothesen/goode-morming-pages/releases/download/v0.1.2/GoodeMormingPages.zip" length="1321051" type="application/octet-stream" sparkle:edSignature="OBFbJ+mIZuUviyPRfhtl2n4pUvPxxUnP0xefzr5eCH7VJ2vB0PGlN8ATpQOlK0faMdm5Cr1pInzOvqpSGIx/BA=="/>
+        </item>
+        <item>
             <title>0.1.1</title>
             <pubDate>Mon, 17 Aug 2026 09:41:17 +0000</pubDate>
             <link>https://github.com/leothesen/goode-morming-pages</link>

@@ -10,11 +10,11 @@ options:
 settings:
   base:
     SWIFT_VERSION: 5.0
-    MARKETING_VERSION: 0.1.1
+    MARKETING_VERSION: 0.1.2
     # Deliberately the same semver string, not a bare integer. Sparkle compares
     # CFBundleVersion to decide whether an update is newer — and with a baseline
     # of "1", a released "0.1.1" reads as OLDER and is silently never offered.
-    CURRENT_PROJECT_VERSION: 0.1.1
+    CURRENT_PROJECT_VERSION: 0.1.2
     CODE_SIGN_IDENTITY: "-"
     CODE_SIGN_STYLE: Manual
     DEVELOPMENT_TEAM: ""
