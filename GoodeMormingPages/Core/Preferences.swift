@@ -22,6 +22,52 @@ final class Preferences: ObservableObject {
         static let dataSourceID = "notionDataSourceID"
         static let dataSourceName = "notionDataSourceName"
         static let titleProperty = "notionTitleProperty"
+        static let tagProperty = "notionTagProperty"
+        static let tagAllowsMultiple = "notionTagAllowsMultiple"
+        static let tagOptions = "notionTagOptions"
+        static let defaultTags = "defaultTags"
+        static let lastEmoji = "lastEmoji"
+        static let declinedRelocation = "declinedRelocation"
+    }
+
+    /// The select column tags are written to, discovered when you pick a
+    /// destination in Settings.
+    @Published var tagPropertyKey: String? {
+        didSet { defaults.set(tagPropertyKey, forKey: Key.tagProperty) }
+    }
+
+    @Published var tagAllowsMultiple: Bool {
+        didSet { defaults.set(tagAllowsMultiple, forKey: Key.tagAllowsMultiple) }
+    }
+
+    /// Options Notion already knows about. Only a convenience for the picker —
+    /// Notion creates unknown names on write.
+    @Published var tagOptions: [String] {
+        didSet { defaults.set(tagOptions, forKey: Key.tagOptions) }
+    }
+
+    /// Pre-selected on every sync.
+    @Published var defaultTags: [String] {
+        didSet { defaults.set(defaultTags, forKey: Key.defaultTags) }
+    }
+
+    /// The emoji used last, offered again next time.
+    @Published var lastEmoji: String {
+        didSet { defaults.set(lastEmoji, forKey: Key.lastEmoji) }
+    }
+
+    /// Set once you've said no to moving the app into Applications.
+    @Published var declinedRelocation: Bool {
+        didSet { defaults.set(declinedRelocation, forKey: Key.declinedRelocation) }
+    }
+
+    var tagProperty: TagProperty? {
+        guard let tagPropertyKey else { return nil }
+        return TagProperty(
+            key: tagPropertyKey,
+            allowsMultiple: tagAllowsMultiple,
+            options: tagOptions
+        )
     }
 
     /// 300 a day. A goal of 0 means "just show the count, no target".
@@ -59,6 +105,8 @@ final class Preferences: ObservableObject {
         defaults.register(defaults: [
             Key.wordGoal: 300,
             Key.smartQuotes: true,
+            Key.defaultTags: ["morning-pages"],
+            Key.lastEmoji: "🌅",
         ])
         wordGoal = defaults.integer(forKey: Key.wordGoal)
         spelling = SpellingOptions(
@@ -69,6 +117,12 @@ final class Preferences: ObservableObject {
         dataSourceID = defaults.string(forKey: Key.dataSourceID)
         dataSourceName = defaults.string(forKey: Key.dataSourceName)
         titlePropertyKey = defaults.string(forKey: Key.titleProperty)
+        tagPropertyKey = defaults.string(forKey: Key.tagProperty)
+        tagAllowsMultiple = defaults.bool(forKey: Key.tagAllowsMultiple)
+        tagOptions = defaults.stringArray(forKey: Key.tagOptions) ?? []
+        defaultTags = defaults.stringArray(forKey: Key.defaultTags) ?? ["morning-pages"]
+        lastEmoji = defaults.string(forKey: Key.lastEmoji) ?? "🌅"
+        declinedRelocation = defaults.bool(forKey: Key.declinedRelocation)
     }
 
     var isConfigured: Bool {

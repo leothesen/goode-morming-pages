@@ -13,8 +13,14 @@ struct SyncService {
     let client: NotionClient
     let destinationID: String
     let titleKey: String
+    let tagProperty: TagProperty?
 
-    func sync(text: String, title: String) async throws -> NotionPage {
+    func sync(
+        text: String,
+        title: String,
+        icon: String?,
+        tags: [String]
+    ) async throws -> NotionPage {
         let blocks = BlockBuilder.blocks(from: text)
         let batches = BlockBuilder.batches(blocks)
 
@@ -23,6 +29,9 @@ struct SyncService {
                 dataSourceID: destinationID,
                 titleKey: titleKey,
                 title: title,
+                icon: icon,
+                tagProperty: tagProperty,
+                tags: tags,
                 children: batches.first ?? []
             )
         }

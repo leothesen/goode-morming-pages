@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1519150A4EA6209AA0E1D0B2 /* BufferStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F926760E71EEAA8552664A /* BufferStore.swift */; };
 		1CA432AB4D31A708DF62813C /* SyncSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58DFC187E7392C5A6FC82CC /* SyncSheet.swift */; };
+		29432B42CC3BAD073C05A804 /* AppRelocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D4A5C9B933322A71C7CC6F /* AppRelocator.swift */; };
 		2FE753E38DB71D3CD16B44D6 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E56BEB8D674B4B2F237C28C /* App.swift */; };
 		32A54AD6F7374549122AE2B1 /* EditorLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AB76708696AC3FBB1AB58D /* EditorLogicTests.swift */; };
 		3A7902D31B4AA7E0ECEA5C90 /* ChromeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0310D7FCD841FCB750D9C3 /* ChromeViews.swift */; };
@@ -45,6 +46,7 @@
 		446D740E0C63E391315D9DED /* BlockBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockBuilder.swift; sourceTree = "<group>"; };
 		497A9B917EEB39FBCAD594F6 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		6D2AFB7EDE10E887E7C96987 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		71D4A5C9B933322A71C7CC6F /* AppRelocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRelocator.swift; sourceTree = "<group>"; };
 		72EB331FEAC60CF036E68A2B /* GoodeMormingPagesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GoodeMormingPagesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CFE16AA69EB1D613E6B7D91 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		803D13B18C4653B44E9D7866 /* GoodeMormingPages.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GoodeMormingPages.entitlements; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 		0D981C4386FE2B113E001FEA /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				71D4A5C9B933322A71C7CC6F /* AppRelocator.swift */,
 				B2F926760E71EEAA8552664A /* BufferStore.swift */,
 				A2BAAA1303B7A99A4AC3E1FA /* Keychain.swift */,
 				CF6DDF780273BAFE9362B23E /* Metrics.swift */,
@@ -266,6 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FE753E38DB71D3CD16B44D6 /* App.swift in Sources */,
+				29432B42CC3BAD073C05A804 /* AppRelocator.swift in Sources */,
 				8E7375E39942F8ACD3FAF6B4 /* BlockBuilder.swift in Sources */,
 				1519150A4EA6209AA0E1D0B2 /* BufferStore.swift in Sources */,
 				3A7902D31B4AA7E0ECEA5C90 /* ChromeViews.swift in Sources */,

@@ -78,6 +78,9 @@ struct EditorView: View {
             SyncSheet(
                 wordCount: model.wordCount,
                 destinationName: preferences.dataSourceName,
+                tagProperty: preferences.tagProperty,
+                initialEmoji: preferences.lastEmoji,
+                initialTags: preferences.defaultTags,
                 isSyncing: model.isSyncing,
                 errorMessage: model.errorMessage,
                 onCancel: {
@@ -99,7 +102,7 @@ struct EditorView: View {
         }
     }
 
-    private func performSync(title: String) {
+    private func performSync(options: SyncOptions) {
         guard let token = Keychain.notionToken,
               let destinationID = preferences.dataSourceID,
               let titleKey = preferences.titlePropertyKey
@@ -111,7 +114,8 @@ struct EditorView: View {
         let service = SyncService(
             client: NotionClient(token: token),
             destinationID: destinationID,
-            titleKey: titleKey
+            titleKey: titleKey,
+            tagProperty: preferences.tagProperty
         )
         let text = model.text
         model.isSyncing = true
@@ -119,7 +123,16 @@ struct EditorView: View {
 
         Task { @MainActor in
             do {
-                let page = try await service.sync(text: text, title: title)
+                let page = try await service.sync(
+                    text: text,
+                    title: options.title,
+                    icon: options.emoji,
+                    tags: options.tags
+                )
+                // Habits, not decisions — offer the same choices next time.
+                if let emoji = options.emoji { preferences.lastEmoji = emoji }
+                if !options.tags.isEmpty { preferences.defaultTags = options.tags }
+
                 // Only now is it safe to clear: Notion is the only record.
                 model.isSyncing = false
                 showSyncSheet = false

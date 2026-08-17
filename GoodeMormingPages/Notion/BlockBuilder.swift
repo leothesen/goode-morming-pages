@@ -14,14 +14,38 @@ enum BlockBuilder {
 
     /// Splits text into paragraph blocks, breaking any paragraph that exceeds
     /// the rich-text cap at a word boundary where possible.
-    ///
-    /// Blank lines are preserved as empty paragraphs so the page keeps the shape
-    /// you wrote it in.
     static func blocks(from text: String) -> [[String: Any]] {
-        text
-            .components(separatedBy: .newlines)
+        paragraphs(in: text)
             .flatMap { split($0) }
             .map(paragraph)
+    }
+
+    /// Groups consecutive non-blank lines into one block each.
+    ///
+    /// A single newline stays *inside* the block as a line break, because Notion
+    /// renders a newline in rich text as a soft break. Only a blank line starts
+    /// a new block.
+    ///
+    /// Turning every newline into its own block — which is what this used to do —
+    /// produces a visibly empty paragraph between each line in Notion, since
+    /// blocks carry their own vertical spacing on top of the break you wanted.
+    static func paragraphs(in text: String) -> [String] {
+        var groups: [String] = []
+        var current: [String] = []
+
+        for line in text.components(separatedBy: .newlines) {
+            if line.trimmingCharacters(in: .whitespaces).isEmpty {
+                if !current.isEmpty {
+                    groups.append(current.joined(separator: "\n"))
+                    current = []
+                }
+            } else {
+                current.append(line)
+            }
+        }
+        if !current.isEmpty { groups.append(current.joined(separator: "\n")) }
+
+        return groups
     }
 
     /// Breaks one paragraph into pieces of at most `maxCharacters`.
@@ -69,7 +93,7 @@ enum BlockBuilder {
         }
     }
 
-    private static func paragraph(_ content: String) -> [String: Any] {
+    static func paragraph(_ content: String) -> [String: Any] {
         [
             "object": "block",
             "type": "paragraph",

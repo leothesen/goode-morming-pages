@@ -117,6 +117,9 @@ struct SettingsView: View {
                 let match = destinations.first { $0.id == id }
                 preferences.dataSourceName = match?.name
                 preferences.titlePropertyKey = match?.titlePropertyKey
+                preferences.tagPropertyKey = match?.tagProperty?.key
+                preferences.tagAllowsMultiple = match?.tagProperty?.allowsMultiple ?? false
+                preferences.tagOptions = match?.tagProperty?.options ?? []
             }
         )
     }

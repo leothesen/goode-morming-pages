@@ -8,6 +8,19 @@ struct NotionDestination: Identifiable, Hashable {
     /// The key of this destination's title property. It is whatever the column
     /// is called; assuming "Name" breaks the moment someone renames it.
     let titlePropertyKey: String
+    /// The select or multi-select property tags go in, if the database has one.
+    let tagProperty: TagProperty?
+}
+
+/// A select / multi-select column, with the options Notion already knows about.
+///
+/// The options are only a convenience for the picker — Notion creates any name
+/// it hasn't seen before on write, so a brand new tag works without setting it
+/// up in Notion first.
+struct TagProperty: Hashable {
+    let key: String
+    let allowsMultiple: Bool
+    let options: [String]
 }
 
 struct NotionPage {
@@ -85,7 +98,14 @@ struct NotionClient {
                 guard let id = result["id"] as? String else { continue }
                 let name = plainText(result["title"]) ?? "Untitled"
                 guard let titleKey = titlePropertyKey(in: result) else { continue }
-                found.append(NotionDestination(id: id, name: name, titlePropertyKey: titleKey))
+                found.append(
+                    NotionDestination(
+                        id: id,
+                        name: name,
+                        titlePropertyKey: titleKey,
+                        tagProperty: tagProperty(in: result)
+                    )
+                )
             }
 
             cursor = (json["has_more"] as? Bool == true) ? json["next_cursor"] as? String : nil
@@ -100,15 +120,35 @@ struct NotionClient {
         dataSourceID: String,
         titleKey: String,
         title: String,
+        icon: String?,
+        tagProperty: TagProperty?,
+        tags: [String],
         children: [[String: Any]]
     ) async throws -> NotionPage {
-        let body: [String: Any] = [
+        var properties: [String: Any] = [
+            titleKey: ["title": [["text": ["content": title]]]],
+        ]
+
+        // Notion creates select options it hasn't seen before, so a new tag name
+        // works without being set up in Notion first.
+        if let tagProperty, !tags.isEmpty {
+            if tagProperty.allowsMultiple {
+                properties[tagProperty.key] = ["multi_select": tags.map { ["name": $0] }]
+            } else if let first = tags.first {
+                properties[tagProperty.key] = ["select": ["name": first]]
+            }
+        }
+
+        var body: [String: Any] = [
             "parent": ["type": "data_source_id", "data_source_id": dataSourceID],
-            "properties": [
-                titleKey: ["title": [["text": ["content": title]]]],
-            ],
+            "properties": properties,
             "children": children,
         ]
+
+        if let icon, !icon.isEmpty {
+            body["icon"] = ["type": "emoji", "emoji": icon]
+        }
+
         let json = try await request(path: "pages", method: "POST", body: body)
         guard let id = json["id"] as? String else { throw NotionError.malformedResponse }
         return NotionPage(id: id, url: json["url"] as? String)
@@ -176,6 +216,41 @@ struct NotionClient {
             if let property = value as? [String: Any], property["type"] as? String == "title" {
                 return key
             }
+        }
+        return nil
+    }
+
+    /// Finds the column tags should go in.
+    ///
+    /// Prefers one actually called "Tags"; otherwise takes the first select or
+    /// multi-select in the schema. Dictionaries are unordered, so the fallback
+    /// is sorted by key to stay stable between runs.
+    private func tagProperty(in object: [String: Any]) -> TagProperty? {
+        guard let properties = object["properties"] as? [String: Any] else { return nil }
+
+        func parse(key: String, value: Any) -> TagProperty? {
+            guard let property = value as? [String: Any],
+                  let type = property["type"] as? String,
+                  type == "multi_select" || type == "select"
+            else { return nil }
+
+            let detail = property[type] as? [String: Any]
+            let options = (detail?["options"] as? [[String: Any]] ?? [])
+                .compactMap { $0["name"] as? String }
+
+            return TagProperty(
+                key: key,
+                allowsMultiple: type == "multi_select",
+                options: options
+            )
+        }
+
+        if let named = properties.first(where: { $0.key.caseInsensitiveCompare("Tags") == .orderedSame }),
+           let property = parse(key: named.key, value: named.value) {
+            return property
+        }
+        for key in properties.keys.sorted() {
+            if let property = parse(key: key, value: properties[key] as Any) { return property }
         }
         return nil
     }

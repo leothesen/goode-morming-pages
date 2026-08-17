@@ -14,6 +14,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         AppDelegate.updaterController.startUpdater()
+        AppRelocator.offerMoveIfNeeded(preferences: Preferences.shared)
     }
 
     /// One window, and closing it means you're done for the morning.

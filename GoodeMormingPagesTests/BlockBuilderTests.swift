@@ -62,13 +62,46 @@ final class BlockBuilderTests: XCTestCase {
 
     // MARK: - Block shape
 
-    func testBlankLinesBecomeEmptyParagraphs() {
-        let blocks = BlockBuilder.blocks(from: "one\n\ntwo")
-        XCTAssertEqual(blocks.count, 3)
+    // MARK: - Line breaks versus new blocks
 
-        let middle = blocks[1]["paragraph"] as? [String: Any]
-        let richText = middle?["rich_text"] as? [[String: Any]]
-        XCTAssertEqual(richText?.count, 0, "a blank line should carry no rich text")
+    func testConsecutiveLinesStayInOneBlock() {
+        // Every newline used to become its own block, which Notion renders with
+        // a visibly empty paragraph between each line.
+        let blocks = BlockBuilder.blocks(from: "Hello\nHow is this working\nPretty well")
+        XCTAssertEqual(blocks.count, 1, "single newlines should not split blocks")
+
+        XCTAssertEqual(content(of: blocks[0]), "Hello\nHow is this working\nPretty well")
+    }
+
+    func testBlankLineStartsANewBlock() {
+        let blocks = BlockBuilder.blocks(from: "first thought\n\nsecond thought")
+        XCTAssertEqual(blocks.count, 2)
+        XCTAssertEqual(content(of: blocks[0]), "first thought")
+        XCTAssertEqual(content(of: blocks[1]), "second thought")
+    }
+
+    func testNoEmptyBlocksAreEmitted() {
+        let blocks = BlockBuilder.blocks(from: "one\n\n\n\ntwo\n\n")
+        XCTAssertEqual(blocks.count, 2, "runs of blank lines are separators, not content")
+        for block in blocks {
+            XCTAssertFalse(content(of: block)?.isEmpty ?? true)
+        }
+    }
+
+    func testWhitespaceOnlyLinesCountAsBlank() {
+        let blocks = BlockBuilder.blocks(from: "one\n   \ntwo")
+        XCTAssertEqual(blocks.count, 2)
+    }
+
+    func testEmptyTextProducesNoBlocks() {
+        XCTAssertTrue(BlockBuilder.blocks(from: "").isEmpty)
+        XCTAssertTrue(BlockBuilder.blocks(from: "\n\n  \n").isEmpty)
+    }
+
+    private func content(of block: [String: Any]) -> String? {
+        let paragraph = block["paragraph"] as? [String: Any]
+        let richText = paragraph?["rich_text"] as? [[String: Any]]
+        return (richText?.first?["text"] as? [String: Any])?["content"] as? String
     }
 
     func testBlockHasTheShapeNotionExpects() {
@@ -87,7 +120,12 @@ final class BlockBuilderTests: XCTestCase {
     // MARK: - The 100 element cap
 
     func testBatchesRespectTheBlockArrayCap() {
-        let blocks = BlockBuilder.blocks(from: (0..<250).map(String.init).joined(separator: "\n"))
+        // Blank-line separated, because single newlines are line breaks inside a
+        // block and would collapse all 250 of these into one.
+        let text = (0..<250).map(String.init).joined(separator: "\n\n")
+        let blocks = BlockBuilder.blocks(from: text)
+        XCTAssertEqual(blocks.count, 250)
+
         let batches = BlockBuilder.batches(blocks)
 
         XCTAssertEqual(batches.count, 3)

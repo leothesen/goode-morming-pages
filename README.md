@@ -27,8 +27,19 @@ heaviest scrim until you have written five of them.
 
 ## Sync
 
-One page per session. You type a title, it creates the page, and only once Notion
-confirms every block landed does the screen clear. **Notion is the only record** —
+One page per session. You give it a title, an emoji and tags; it creates the page,
+and only once Notion confirms every block landed does the screen clear.
+
+**Line breaks.** Consecutive lines stay in one Notion block, separated by line
+breaks. A blank line starts a new block. Splitting on every newline — which is
+what it used to do — leaves a visibly empty paragraph between each line, because
+Notion blocks carry their own vertical spacing on top of the break.
+
+**Tags** come from the select or multi-select column in your database (it prefers
+one called "Tags"). Options are read from the schema when you pick the destination
+in Settings, and default to `morning-pages`. Anything you type that Notion hasn't
+seen is created on write. The emoji and tags you chose last time are offered again.
+ **Notion is the only record** —
 there is no local archive by design, so the confirm-then-clear order is
 load-bearing.
 
@@ -75,13 +86,37 @@ open /Applications/GoodeMormingPages.app
 ```
 
 The app is ad-hoc signed and not notarised, so `spctl` rejects it. Files fetched
-with `gh` or `curl` are not quarantined and open without complaint. **If you
-download through a browser instead**, macOS will quarantine it and refuse to
-open it — clear that with:
+with `gh` or `curl` carry no quarantine flag and open without complaint.
+
+On first launch it offers to move itself into `/Applications`. Say yes — running
+it from `~/Downloads` is how you end up with three copies.
+
+### If you download through a browser
+
+macOS quarantines the file and refuses to open it. Either clear the flag:
 
 ```sh
-xattr -dr com.apple.quarantine /Applications/GoodeMormingPages.app
+xattr -dr com.apple.quarantine ~/Downloads/GoodeMormingPages.app
 ```
+
+Or go through the UI: double-click and let it be blocked, then open **System
+Settings → Privacy & Security**, scroll to the bottom, and click **Open Anyway**
+next to the message about Goode Morming Pages. You may be asked for Touch ID or
+your password, and you only do this once per installed copy.
+
+### Duplicate copies
+
+If the app ever appears to have renamed itself — "GoodeMormingPages 2" — you have
+more than one copy. Downloading the zip twice leaves `GoodeMormingPages (1).zip`,
+and unzipping that gives you `GoodeMormingPages 2.app` beside the first. macOS
+registers both under the same bundle ID and tells them apart by filename.
+
+```sh
+ls -d ~/Downloads/GoodeMorming* /Applications/GoodeMorming*   # find them
+mdfind "kMDItemCFBundleIdentifier == 'co.leothesen.GoodeMormingPages'"
+```
+
+Delete everything except the copy in `/Applications`.
 
 ## Releasing
 
