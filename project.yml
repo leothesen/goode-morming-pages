@@ -65,10 +65,15 @@ targets:
         NSSupportsSuddenTermination: false
         ATSApplicationFontsPath: Fonts
 
-        # Sparkle. The feed is a plain unauthenticated URL, which only works
-        # because this repo is public — a private repo 404s here and Sparkle
-        # treats a failed feed fetch as "no update available", silently.
-        SUFeedURL: https://raw.githubusercontent.com/leothesen/goode-morming-pages/main/appcast.xml
+        # Sparkle. The feed is served from the latest release rather than from a
+        # file on main: /releases/latest/download/ is a permanently stable URL
+        # that always resolves to the newest release's asset, so publishing needs
+        # no write access to a protected branch.
+        #
+        # Still a plain unauthenticated URL, which only works because this repo
+        # is public. A private repo 404s here, and Sparkle treats a failed feed
+        # fetch as "no update available", silently.
+        SUFeedURL: https://github.com/leothesen/goode-morming-pages/releases/latest/download/appcast.xml
         SUPublicEDKey: iIiC1hCpKxreAP1k91BU66Buf4k2HNK7p8WyJuKM/vc=
         SUEnableAutomaticChecks: true
         SUAllowsAutomaticUpdates: true
