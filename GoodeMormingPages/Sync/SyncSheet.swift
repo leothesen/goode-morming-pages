@@ -21,10 +21,6 @@ struct SyncSheet: View {
     @State private var newTag = ""
     @FocusState private var titleFocused: Bool
 
-    /// A few that suit a morning journal. Any other emoji can be typed or picked
-    /// from the system palette.
-    private let quickEmoji = ["🌅", "☕️", "📝", "🌱", "🌊", "🧠", "🌙", "✨"]
-
     init(
         wordCount: Int,
         destinationName: String?,
@@ -67,95 +63,69 @@ struct SyncSheet: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            header
-            titleRow
-            emojiRow
+        VStack(alignment: .leading, spacing: 14) {
+            // Laid out like the Notion page it is about to create: icon, then
+            // title, then the properties directly underneath.
+            HStack(alignment: .center, spacing: 10) {
+                EmojiPickerButton(emoji: $emoji)
+                VStack(alignment: .leading, spacing: 2) {
+                    TextField("Name this session", text: $title)
+                        .textFieldStyle(.plain)
+                        .font(.system(size: 21, weight: .semibold))
+                        .focused($titleFocused)
+                        .onSubmit { if canSync { onSync(options) } }
+                        .disabled(isSyncing)
+                    Text(subtitle).font(.caption).foregroundStyle(.secondary)
+                }
+            }
+
             if tagProperty != nil { tagRow }
             if let errorMessage { errorRow(errorMessage) }
+            Divider()
             footer
         }
-        .padding(22)
-        .frame(width: 440)
+        .padding(20)
+        .frame(width: 460)
         .onAppear { titleFocused = true }
     }
 
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Name this session").font(.headline)
-            Text(subtitle).font(.caption).foregroundStyle(.secondary)
-        }
-    }
-
-    private var titleRow: some View {
-        HStack(spacing: 8) {
-            Text(emoji.isEmpty ? "  " : emoji).font(.title2)
-            TextField("", text: $title)
-                .textFieldStyle(.roundedBorder)
-                .focused($titleFocused)
-                .onSubmit { if canSync { onSync(options) } }
-                .disabled(isSyncing)
-        }
-    }
-
-    private var emojiRow: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Icon").font(.caption).foregroundStyle(.secondary)
-            HStack(spacing: 6) {
-                ForEach(quickEmoji, id: \.self) { option in
-                    Button(option) { emoji = option }
-                        .buttonStyle(.plain)
-                        .padding(4)
-                        .background(
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(emoji == option ? Color.accentColor.opacity(0.25) : .clear)
-                        )
-                }
-                Button("Other…") { NSApp.orderFrontCharacterPalette(nil) }
-                    .buttonStyle(.link)
-                    .font(.caption)
-                TextField("", text: $emoji)
-                    .textFieldStyle(.roundedBorder)
-                    .frame(width: 46)
-                    .onChange(of: emoji) { _, value in
-                        // A Notion page icon is exactly one emoji.
-                        if let first = value.first, value.count > 1 {
-                            emoji = String(first)
-                        }
-                    }
-            }
-        }
-    }
-
     private var tagRow: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("Tags").font(.caption).foregroundStyle(.secondary)
-            FlowLayout(spacing: 6) {
-                ForEach(allTagOptions, id: \.self) { tag in
-                    let isOn = selectedTags.contains(tag)
-                    Button(tag) { toggle(tag) }
-                        .buttonStyle(.plain)
+        HStack(alignment: .top, spacing: 10) {
+            Label("Tags", systemImage: "list.bullet")
+                .labelStyle(.titleAndIcon)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(width: 74, alignment: .leading)
+                .padding(.top, 4)
+
+            VStack(alignment: .leading, spacing: 6) {
+                FlowLayout(spacing: 6) {
+                    ForEach(allTagOptions, id: \.self) { tag in
+                        let isOn = selectedTags.contains(tag)
+                        Button(tag) { toggle(tag) }
+                            .buttonStyle(.plain)
+                            .font(.caption)
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 4)
+                            .background(
+                                Capsule().fill(isOn ? Color.accentColor.opacity(0.25) : Color.secondary.opacity(0.12))
+                            )
+                            .overlay(
+                                Capsule().stroke(isOn ? Color.accentColor : .clear, lineWidth: 1)
+                            )
+                    }
+                    TextField("Add", text: $newTag)
+                        .textFieldStyle(.plain)
                         .font(.caption)
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 4)
-                        .background(
-                            Capsule().fill(isOn ? Color.accentColor.opacity(0.25) : Color.secondary.opacity(0.12))
-                        )
-                        .overlay(
-                            Capsule().stroke(isOn ? Color.accentColor : .clear, lineWidth: 1)
-                        )
+                        .frame(width: 70)
+                        .onSubmit(addNewTag)
+                }
+                if allTagOptions.isEmpty {
+                    Text("Type a tag and press Return. New tags are created in Notion.")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
             }
-            HStack(spacing: 6) {
-                TextField("Add a tag", text: $newTag)
-                    .textFieldStyle(.roundedBorder)
-                    .onSubmit(addNewTag)
-                Button("Add", action: addNewTag)
-                    .disabled(newTag.trimmingCharacters(in: .whitespaces).isEmpty)
-            }
-            Text("New tags are created in Notion on sync.")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
         }
     }
 

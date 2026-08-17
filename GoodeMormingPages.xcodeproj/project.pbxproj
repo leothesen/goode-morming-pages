@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		125B294FB3845601C7DCF999 /* EmojiPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76D40AE2CA0145F9A4844B7 /* EmojiPicker.swift */; };
 		1519150A4EA6209AA0E1D0B2 /* BufferStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F926760E71EEAA8552664A /* BufferStore.swift */; };
 		1CA432AB4D31A708DF62813C /* SyncSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58DFC187E7392C5A6FC82CC /* SyncSheet.swift */; };
 		29432B42CC3BAD073C05A804 /* AppRelocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D4A5C9B933322A71C7CC6F /* AppRelocator.swift */; };
@@ -14,12 +15,14 @@
 		32A54AD6F7374549122AE2B1 /* EditorLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AB76708696AC3FBB1AB58D /* EditorLogicTests.swift */; };
 		3A7902D31B4AA7E0ECEA5C90 /* ChromeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0310D7FCD841FCB750D9C3 /* ChromeViews.swift */; };
 		5119F2E50C83AD23D64A93D2 /* EditorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A53E4D1AAC2605CD8634789 /* EditorModel.swift */; };
+		54FD89DADCB4A5C898927DD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 469BB7C8A5B2BA71C526185F /* Assets.xcassets */; };
 		5DD35B919FC7B43E3FFDF76C /* WordCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0664841CB25F3779A2A1CF7 /* WordCount.swift */; };
 		622C75DD3358B11CA87A6B27 /* NotionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848CC1E2A8024798FEBB8CA /* NotionClient.swift */; };
 		6463E0012C6DC3375DCBE27B /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6DDF780273BAFE9362B23E /* Metrics.swift */; };
 		6F4DADCBC64C0338F711A175 /* BlockBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E01422E41E16063B908300 /* BlockBuilderTests.swift */; };
 		6FEC02A3CDEFFB59A2B1B0C2 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFE16AA69EB1D613E6B7D91 /* Preferences.swift */; };
 		800438E0EBDC2A3DEE223E40 /* ScrimOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818A4F1E51F26F549AD0D3ED /* ScrimOverlay.swift */; };
+		8A9FE39A565549B8834B3B2C /* RuntimeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBC00785193BCD2BB22C0DB /* RuntimeEnvironment.swift */; };
 		8B8EC62BB0E326D8CAC820C0 /* SyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4003B1870C5DF494CA3598B /* SyncService.swift */; };
 		8E7375E39942F8ACD3FAF6B4 /* BlockBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446D740E0C63E391315D9DED /* BlockBuilder.swift */; };
 		9F362F31A0515A7DFE51781A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2AFB7EDE10E887E7C96987 /* SettingsView.swift */; };
@@ -41,9 +44,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2FBC00785193BCD2BB22C0DB /* RuntimeEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeEnvironment.swift; sourceTree = "<group>"; };
 		36E01422E41E16063B908300 /* BlockBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockBuilderTests.swift; sourceTree = "<group>"; };
 		413449A81F88616FDA185E5A /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		446D740E0C63E391315D9DED /* BlockBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockBuilder.swift; sourceTree = "<group>"; };
+		469BB7C8A5B2BA71C526185F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		497A9B917EEB39FBCAD594F6 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		6D2AFB7EDE10E887E7C96987 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		71D4A5C9B933322A71C7CC6F /* AppRelocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRelocator.swift; sourceTree = "<group>"; };
@@ -56,6 +61,7 @@
 		9A53E4D1AAC2605CD8634789 /* EditorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorModel.swift; sourceTree = "<group>"; };
 		9B0310D7FCD841FCB750D9C3 /* ChromeViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChromeViews.swift; sourceTree = "<group>"; };
 		A2BAAA1303B7A99A4AC3E1FA /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		A76D40AE2CA0145F9A4844B7 /* EmojiPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPicker.swift; sourceTree = "<group>"; };
 		B0664841CB25F3779A2A1CF7 /* WordCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordCount.swift; sourceTree = "<group>"; };
 		B2F926760E71EEAA8552664A /* BufferStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BufferStore.swift; sourceTree = "<group>"; };
 		C350353AE9277625D36FC0D0 /* GoodeMormingPages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoodeMormingPages.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,6 +93,7 @@
 				A2BAAA1303B7A99A4AC3E1FA /* Keychain.swift */,
 				CF6DDF780273BAFE9362B23E /* Metrics.swift */,
 				7CFE16AA69EB1D613E6B7D91 /* Preferences.swift */,
+				2FBC00785193BCD2BB22C0DB /* RuntimeEnvironment.swift */,
 				497A9B917EEB39FBCAD594F6 /* Theme.swift */,
 				B0664841CB25F3779A2A1CF7 /* WordCount.swift */,
 			);
@@ -149,6 +156,7 @@
 				8D66DFFE8A8BA8CB0F942F39 /* Settings */,
 				9005BC930F114360685D5AA2 /* Sync */,
 				8E56BEB8D674B4B2F237C28C /* App.swift */,
+				469BB7C8A5B2BA71C526185F /* Assets.xcassets */,
 				803D13B18C4653B44E9D7866 /* GoodeMormingPages.entitlements */,
 				8203F4B50E6D292038770CDB /* Info.plist */,
 			);
@@ -176,6 +184,7 @@
 		9005BC930F114360685D5AA2 /* Sync */ = {
 			isa = PBXGroup;
 			children = (
+				A76D40AE2CA0145F9A4844B7 /* EmojiPicker.swift */,
 				E58DFC187E7392C5A6FC82CC /* SyncSheet.swift */,
 			);
 			path = Sync;
@@ -207,6 +216,7 @@
 			buildConfigurationList = 33B8D49054397E7E8C7B757F /* Build configuration list for PBXNativeTarget "GoodeMormingPages" */;
 			buildPhases = (
 				A211DDEF0ED8231065B60D0A /* Sources */,
+				0B09B6ACE3D6ED459C686136 /* Resources */,
 				D03FB50581AB963D7F715779 /* Frameworks */,
 			);
 			buildRules = (
@@ -263,6 +273,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		0B09B6ACE3D6ED459C686136 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				54FD89DADCB4A5C898927DD3 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		A211DDEF0ED8231065B60D0A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -275,10 +296,12 @@
 				3A7902D31B4AA7E0ECEA5C90 /* ChromeViews.swift in Sources */,
 				5119F2E50C83AD23D64A93D2 /* EditorModel.swift in Sources */,
 				BEEFBFBE5D51517B62E3CF2F /* EditorView.swift in Sources */,
+				125B294FB3845601C7DCF999 /* EmojiPicker.swift in Sources */,
 				A40669AE894750B7FDAF2402 /* Keychain.swift in Sources */,
 				6463E0012C6DC3375DCBE27B /* Metrics.swift in Sources */,
 				622C75DD3358B11CA87A6B27 /* NotionClient.swift in Sources */,
 				6FEC02A3CDEFFB59A2B1B0C2 /* Preferences.swift in Sources */,
+				8A9FE39A565549B8834B3B2C /* RuntimeEnvironment.swift in Sources */,
 				800438E0EBDC2A3DEE223E40 /* ScrimOverlay.swift in Sources */,
 				C2F21ED5D0FCA7195D5FBCA3 /* ScrimTextView.swift in Sources */,
 				9F362F31A0515A7DFE51781A /* SettingsView.swift in Sources */,
@@ -312,7 +335,7 @@
 		5303AF540DE7A24E103143EB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = GoodeMormingPages/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -325,7 +348,7 @@
 		557DCDB15C9AB684A5CDBA24 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = GoodeMormingPages/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

@@ -167,6 +167,16 @@ struct NotionClient {
         try await destinations()
     }
 
+    /// Re-reads one destination's schema.
+    ///
+    /// Needed because the tag column can be added, renamed, or gain new options
+    /// in Notion long after you first picked the database. Without this the app
+    /// only learned the schema when you re-selected the destination in Settings,
+    /// so tags silently never got written.
+    func destination(id: String) async throws -> NotionDestination? {
+        try await destinations().first { $0.id == id }
+    }
+
     // MARK: - Plumbing
 
     private func request(path: String, method: String, body: [String: Any]) async throws -> [String: Any] {

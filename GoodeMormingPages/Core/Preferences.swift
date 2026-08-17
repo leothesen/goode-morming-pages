@@ -128,4 +128,25 @@ final class Preferences: ObservableObject {
     var isConfigured: Bool {
         dataSourceID != nil && Keychain.notionToken != nil
     }
+
+    func apply(destination: NotionDestination) {
+        dataSourceID = destination.id
+        dataSourceName = destination.name
+        titlePropertyKey = destination.titlePropertyKey
+        tagPropertyKey = destination.tagProperty?.key
+        tagAllowsMultiple = destination.tagProperty?.allowsMultiple ?? false
+        tagOptions = destination.tagProperty?.options ?? []
+    }
+
+    /// Pulls the destination's schema again in the background.
+    ///
+    /// Tag options live in Notion and change there. Refreshing on launch and
+    /// before each sync means you never have to go back to Settings and
+    /// re-select the database just to pick up a new tag.
+    func refreshSchema() async {
+        guard !RuntimeEnvironment.isRunningTests else { return }
+        guard let token = Keychain.notionToken, let id = dataSourceID else { return }
+        guard let destination = try? await NotionClient(token: token).destination(id: id) else { return }
+        await MainActor.run { apply(destination: destination) }
+    }
 }

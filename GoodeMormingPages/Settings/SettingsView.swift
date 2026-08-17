@@ -113,13 +113,11 @@ struct SettingsView: View {
         Binding(
             get: { preferences.dataSourceID },
             set: { id in
-                preferences.dataSourceID = id
-                let match = destinations.first { $0.id == id }
-                preferences.dataSourceName = match?.name
-                preferences.titlePropertyKey = match?.titlePropertyKey
-                preferences.tagPropertyKey = match?.tagProperty?.key
-                preferences.tagAllowsMultiple = match?.tagProperty?.allowsMultiple ?? false
-                preferences.tagOptions = match?.tagProperty?.options ?? []
+                guard let match = destinations.first(where: { $0.id == id }) else {
+                    preferences.dataSourceID = id
+                    return
+                }
+                preferences.apply(destination: match)
             }
         )
     }

@@ -68,6 +68,14 @@ struct EditorView: View {
             model.textDidChange(goal: preferences.wordGoal)
             markActive()
         }
+        .task {
+            // Tag options live in Notion and change there. Pulling the schema on
+            // launch means you never have to revisit Settings to see a new tag.
+            await preferences.refreshSchema()
+        }
+        .onChange(of: showSyncSheet) { _, isShowing in
+            if isShowing { Task { await preferences.refreshSchema() } }
+        }
         .onReceive(NotificationCenter.default.publisher(for: .requestSync)) { _ in
             if !model.text.isEmpty { showSyncSheet = true }
         }
