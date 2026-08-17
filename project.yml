@@ -19,6 +19,9 @@ settings:
     CODE_SIGN_STYLE: Manual
     DEVELOPMENT_TEAM: ""
     ENABLE_HARDENED_RUNTIME: YES
+    # Ad-hoc signing plus an embedded framework needs library validation off, or
+    # the app dies at launch before drawing anything. See the entitlements file.
+    CODE_SIGN_ENTITLEMENTS: GoodeMormingPages/GoodeMormingPages.entitlements
     ENABLE_USER_SCRIPT_SANDBOXING: NO
     GENERATE_INFOPLIST_FILE: NO
     SWIFT_STRICT_CONCURRENCY: minimal

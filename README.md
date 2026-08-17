@@ -60,6 +60,29 @@ xcodebuild -scheme GoodeMormingPages -configuration Debug \
 Requires Xcode 26 and macOS 26 — the app targets Liquid Glass APIs that do not
 exist in earlier toolchains.
 
+## Installing
+
+Download `GoodeMormingPages.zip` from the
+[latest release](https://github.com/leothesen/goode-morming-pages/releases/latest)
+using the command line, which avoids Gatekeeper entirely:
+
+```sh
+cd ~/Downloads
+gh release download --repo leothesen/goode-morming-pages --pattern '*.zip'
+ditto -x -k GoodeMormingPages.zip .
+mv GoodeMormingPages.app /Applications/
+open /Applications/GoodeMormingPages.app
+```
+
+The app is ad-hoc signed and not notarised, so `spctl` rejects it. Files fetched
+with `gh` or `curl` are not quarantined and open without complaint. **If you
+download through a browser instead**, macOS will quarantine it and refuse to
+open it — clear that with:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/GoodeMormingPages.app
+```
+
 ## Releasing
 
 Publish a release on GitHub with a `v*` tag. That fires `.github/workflows/release.yml`,

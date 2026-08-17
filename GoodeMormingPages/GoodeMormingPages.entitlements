@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Required because the app is ad-hoc signed and embeds Sparkle.framework.
+
+	  The hardened runtime turns on Library Validation, which will only load
+	  libraries signed with the same Team ID as the host process. Ad-hoc signing
+	  has no Team ID at all, so dyld refuses to map Sparkle and the app dies at
+	  launch with "different Team IDs" before showing a window.
+
+	  The alternative is a paid Developer ID certificate. For a personal app that
+	  is never notarised, this is the right trade — but do not copy this
+	  entitlement into anything you intend to distribute properly.
+	-->
+	<key>com.apple.security.cs.disable-library-validation</key>
+	<true/>
+</dict>
+</plist>

@@ -47,6 +47,7 @@
 		6D2AFB7EDE10E887E7C96987 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		72EB331FEAC60CF036E68A2B /* GoodeMormingPagesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GoodeMormingPagesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CFE16AA69EB1D613E6B7D91 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		803D13B18C4653B44E9D7866 /* GoodeMormingPages.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GoodeMormingPages.entitlements; sourceTree = "<group>"; };
 		818A4F1E51F26F549AD0D3ED /* ScrimOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrimOverlay.swift; sourceTree = "<group>"; };
 		8203F4B50E6D292038770CDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8E56BEB8D674B4B2F237C28C /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
@@ -145,6 +146,7 @@
 				8D66DFFE8A8BA8CB0F942F39 /* Settings */,
 				9005BC930F114360685D5AA2 /* Sync */,
 				8E56BEB8D674B4B2F237C28C /* App.swift */,
+				803D13B18C4653B44E9D7866 /* GoodeMormingPages.entitlements */,
 				8203F4B50E6D292038770CDB /* Info.plist */,
 			);
 			path = GoodeMormingPages;
@@ -379,6 +381,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = GoodeMormingPages/GoodeMormingPages.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
@@ -444,6 +447,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = GoodeMormingPages/GoodeMormingPages.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
