@@ -1,80 +1,50 @@
 name: Release
 
-# Merging to main ships a release.
-#
-# This is deliberately ONE workflow rather than "push to main creates a release,
-# release event builds it". A release created with GITHUB_TOKEN does not trigger
-# other workflows, so that chain would silently do nothing at all.
+# Publishing a release ships it. Nothing happens on merge.
 on:
-  push:
-    branches: [main]
+  release:
+    types: [published]
 
-  # Re-run a failed release without an empty commit.
+  # Re-run a release whose job failed partway.
   workflow_dispatch:
     inputs:
-      version:
-        description: "Version to build, e.g. 0.2.0. Leave blank to bump the patch."
-        required: false
+      tag:
+        description: "Existing tag to build, e.g. v0.2.0"
+        required: true
 
 permissions:
   contents: write
 
 concurrency:
-  # Two merges in quick succession would otherwise race on the tag and on the
-  # appcast commit.
   group: release
   cancel-in-progress: false
 
 jobs:
   release:
     runs-on: macos-26
-    # The bot's own appcast commit lands on main and would otherwise start a
-    # second release, which would start a third.
-    if: "!contains(github.event.head_commit.message, '[skip release]')"
 
     steps:
+      - name: Resolve tag
+        id: tag
+        run: |
+          TAG="${{ github.event.release.tag_name || inputs.tag }}"
+          if [ -z "$TAG" ]; then echo "::error::no tag resolved"; exit 1; fi
+          echo "tag=$TAG"         >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
       - uses: actions/checkout@v5
         with:
+          ref: ${{ steps.tag.outputs.tag }}
           fetch-depth: 0
 
-      - name: Work out the next version
-        id: version
+      - name: Stamp the version from the tag
         run: |
-          EXPLICIT="${{ inputs.version }}"
-          if [ -n "$EXPLICIT" ]; then
-            echo "version=$EXPLICIT" >> "$GITHUB_OUTPUT"
-            echo "tag=v$EXPLICIT"    >> "$GITHUB_OUTPUT"
-            echo "explicit version $EXPLICIT"
-            exit 0
-          fi
-
-          LATEST=$(git tag --list 'v*' --sort=-v:refname | head -1)
-          LATEST=${LATEST:-v0.0.0}
-          BASE=${LATEST#v}
-          MAJOR=$(echo "$BASE" | cut -d. -f1)
-          MINOR=$(echo "$BASE" | cut -d. -f2)
-          PATCH=$(echo "$BASE" | cut -d. -f3)
-
-          # A commit can ask for a bigger bump; patch is the default.
-          MESSAGE=$(git log -1 --pretty=%B)
-          case "$MESSAGE" in
-            *"[major]"*) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
-            *"[minor]"*) MINOR=$((MINOR + 1)); PATCH=0 ;;
-            *)           PATCH=$((PATCH + 1)) ;;
-          esac
-
-          V="$MAJOR.$MINOR.$PATCH"
-          echo "version=$V"  >> "$GITHUB_OUTPUT"
-          echo "tag=v$V"     >> "$GITHUB_OUTPUT"
-          echo "$LATEST -> v$V"
-
-      - name: Stamp the version
-        run: |
-          V="${{ steps.version.outputs.version }}"
+          V="${{ steps.tag.outputs.version }}"
           sed -i '' "s/MARKETING_VERSION = .*;/MARKETING_VERSION = $V;/g" \
             GoodeMormingPages.xcodeproj/project.pbxproj
           sed -i '' "s/CURRENT_PROJECT_VERSION = .*;/CURRENT_PROJECT_VERSION = $V;/g" \
             GoodeMormingPages.xcodeproj/project.pbxproj
+          grep -m1 "MARKETING_VERSION" GoodeMormingPages.xcodeproj/project.pbxproj
 
       - name: Test
         run: |
@@ -98,7 +68,8 @@ jobs:
           APP="build/Build/Products/Release/GoodeMormingPages.app"
 
           # "BUILD SUCCEEDED" says nothing about whether the thing runs. v0.1.1
-          # built, signed, published — and died at launch.
+          # built, signed, published — and died at launch because ad-hoc signing
+          # plus the hardened runtime blocks loading Sparkle.framework.
           codesign -d --entitlements - "$APP" 2>&1 \
             | grep -q "disable-library-validation" \
             || { echo "::error::library validation is on; the app will not load Sparkle"; exit 1; }
@@ -148,7 +119,7 @@ jobs:
           # go subtly wrong when the XML is assembled by hand.
           /tmp/sparkle/bin/generate_appcast \
             --ed-key-file "$KEY_FILE" \
-            --download-url-prefix "https://github.com/${{ github.repository }}/releases/download/${{ steps.version.outputs.tag }}/" \
+            --download-url-prefix "https://github.com/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag }}/" \
             --link "https://github.com/${{ github.repository }}" \
             -o appcast.xml \
             assets/
@@ -156,73 +127,40 @@ jobs:
           rm -f "$KEY_FILE"
           cat appcast.xml
 
-      - name: Tag and publish the release
+      - name: Attach the app and the feed to the release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="${{ steps.version.outputs.tag }}"
+          # The appcast ships as a release asset rather than a commit on main.
+          #
+          # Committing it back to main fought branch protection: the bot is not
+          # exempt from "changes must be made through a pull request", so the
+          # push was rejected, the release looked fine, and the update feed
+          # silently stopped advancing. Serving it from
+          # releases/latest/download/ is a permanently stable URL that needs no
+          # write access to any branch.
+          gh release upload "${{ steps.tag.outputs.tag }}" \
+            assets/GoodeMormingPages.zip \
+            appcast.xml \
+            --clobber
 
-          # Tag only once everything above has passed, so a failed build never
-          # leaves a dangling tag behind.
-          git tag "$TAG" "${{ github.sha }}"
-          git push origin "$TAG"
-
-          PREVIOUS=$(git tag --list 'v*' --sort=-v:refname | sed -n '2p')
-          if [ -n "$PREVIOUS" ]; then
-            gh release create "$TAG" assets/GoodeMormingPages.zip \
-              --title "$TAG" --generate-notes --notes-start-tag "$PREVIOUS"
-          else
-            gh release create "$TAG" assets/GoodeMormingPages.zip \
-              --title "$TAG" --generate-notes
-          fi
-
-      - name: Publish appcast to main
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Confirm the feed is live and signed
         run: |
-          # NOTE: main is protected. github-actions[bot] must be a bypass actor
-          # in the ruleset or this push is rejected and the update feed goes
-          # stale while the release itself looks fine.
-          cp appcast.xml /tmp/appcast.xml
-          git checkout -- .
-          git fetch origin main
-          git checkout main
-          cp /tmp/appcast.xml appcast.xml
+          # The failure this guards against is silent: Sparkle treats an
+          # unreachable feed as "no update available" and says nothing.
+          URL="https://github.com/${{ github.repository }}/releases/latest/download/appcast.xml"
+          V="${{ steps.tag.outputs.version }}"
 
-          V="${{ steps.version.outputs.version }}"
-          sed -i '' "s/MARKETING_VERSION: .*/MARKETING_VERSION: $V/" project.yml
-          sed -i '' "s/CURRENT_PROJECT_VERSION: .*/CURRENT_PROJECT_VERSION: $V/" project.yml
-          sed -i '' "s/MARKETING_VERSION = .*;/MARKETING_VERSION = $V;/g" \
-            GoodeMormingPages.xcodeproj/project.pbxproj
-          sed -i '' "s/CURRENT_PROJECT_VERSION = .*;/CURRENT_PROJECT_VERSION = $V;/g" \
-            GoodeMormingPages.xcodeproj/project.pbxproj
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add appcast.xml project.yml GoodeMormingPages.xcodeproj/project.pbxproj
-
-          if git diff --cached --quiet; then
-            echo "nothing to publish"
-          else
-            # [skip release] stops this commit starting another release.
-            git commit -m "chore: appcast and version for ${{ steps.version.outputs.tag }} [skip release]"
-            git push origin main
-          fi
-
-      - name: Confirm the feed is actually reachable
-        run: |
-          # The failure this guards against is silent: Sparkle treats a 404 feed
-          # as "no update available" and never tells the user anything.
-          URL="https://raw.githubusercontent.com/${{ github.repository }}/main/appcast.xml"
           for i in 1 2 3 4 5; do
-            CODE=$(curl -s -o /tmp/feed.xml -w "%{http_code}" "$URL")
-            if [ "$CODE" = "200" ] && grep -q "${{ steps.version.outputs.version }}" /tmp/feed.xml; then
+            CODE=$(curl -sL -o /tmp/feed.xml -w "%{http_code}" "$URL")
+            if [ "$CODE" = "200" ] && grep -q "$V" /tmp/feed.xml; then
               grep -q "sparkle:edSignature" /tmp/feed.xml \
-                && { echo "feed is live and signed"; exit 0; } \
+                && { echo "feed is live, signed, and advertises $V"; exit 0; } \
                 || { echo "::error::feed has no signature"; exit 1; }
             fi
-            echo "attempt $i: HTTP $CODE, waiting for raw CDN"
+            echo "attempt $i: HTTP $CODE"
             sleep 10
           done
-          echo "::error::appcast did not update at $URL"
+          echo "::error::feed did not resolve to $V at $URL"
+          cat /tmp/feed.xml || true
           exit 1

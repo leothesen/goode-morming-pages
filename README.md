@@ -120,48 +120,63 @@ Delete everything except the copy in `/Applications`.
 
 ## Contributing and releasing
 
-`main` is protected. Everything goes through a pull request.
+`main` is protected. Everything goes through a pull request, and shipping is a
+separate, deliberate act.
 
 ```
-branch → PR → CI must pass → merge → release ships automatically
+branch → PR → CI must pass → merge          (nothing ships)
+publish a release with a v* tag → it ships
 ```
 
 **On the PR**, `.github/workflows/ci.yml` builds Debug, runs the tests, then
 builds Release and launches it to prove it actually starts. Failures block the
 merge.
 
-**On merge**, `.github/workflows/release.yml` works out the next version, builds,
-tests, smoke-tests, packages with `ditto`, signs with Sparkle's EdDSA key, tags,
-publishes a GitHub release with generated notes, and commits the updated
-`appcast.xml` back to `main`.
+**On publishing a release**, `.github/workflows/release.yml` stamps the version
+from the tag, tests, builds, smoke-tests, packages with `ditto`, signs with
+Sparkle's EdDSA key, and attaches both the app and `appcast.xml` to the release.
 
-### Versioning
+```sh
+gh release create v0.2.0 --generate-notes
+```
 
-The patch number bumps on every merge. To ask for something bigger, put `[minor]`
-or `[major]` in the merge commit message. To merge without shipping, use
-`[skip release]`.
+It must be a *release*, not a bare `git push --tags` — the workflow listens for
+`release: published`. Merging to `main` ships nothing.
 
-### Two settings this depends on
+### The update feed
 
-- **Required status check:** `build-and-test`. Without it the PR gate is
-  decorative.
-- **`github-actions[bot]` must be a bypass actor in the ruleset.** The release
-  commits `appcast.xml` to `main`. If the bot is blocked, the release still
-  publishes but the update feed silently stops advancing, and nobody is offered
-  the new version.
+Sparkle reads
+`https://github.com/leothesen/goode-morming-pages/releases/latest/download/appcast.xml`,
+a permanently stable URL that always resolves to the newest release's asset.
 
-### Why one workflow and not two
+It used to be a file on `main`, committed by the release job. That fought branch
+protection: `github-actions[bot]` is not exempt from "changes must be made
+through a pull request", so the push was rejected, the release still looked
+perfectly healthy, and the feed silently stopped advancing. Serving the feed from
+the release itself needs no write access to any branch, so there is nothing to
+keep exempt.
 
-The obvious design — merge creates a release, a second workflow builds it — does
-not work. Anything created with `GITHUB_TOKEN` does not trigger further
+`appcast.xml` is still committed at the repo root. It is the *old* feed location,
+kept only so copies installed before this change get offered one more update and
+land on the new URL. Once nothing is running an older build it can be deleted.
+
+### Required setting
+
+**Required status check: `build-and-test`.** Without it the PR gate is decorative.
+
+### Why the release job is one workflow
+
+An earlier design had merges create a release and a second workflow build it.
+That does not work: anything created with `GITHUB_TOKEN` does not trigger further
 workflows, so the build would never start and nothing would say why.
 
 ### Things that will bite
 
-- **The repo must stay public.** The appcast is fetched from
-  `raw.githubusercontent.com` with no credentials, and Sparkle treats a failed
-  feed fetch as "no update available" without a word. The release job ends by
-  fetching the feed and asserting it is both reachable and signed.
+- **The repo must stay public.** The appcast and the app are fetched from the
+  releases page with no credentials, and Sparkle treats a failed feed fetch as
+  "no update available" without a word. The release job ends by fetching the
+  published feed and asserting it is reachable, signed, and advertising the
+  version just built.
 - **`CURRENT_PROJECT_VERSION` must sort correctly.** Sparkle compares
   `CFBundleVersion`. It is kept as the same semver string as `MARKETING_VERSION`
   precisely so `0.2.0` beats `0.1.1`. A bare integer baseline like `1` would make
