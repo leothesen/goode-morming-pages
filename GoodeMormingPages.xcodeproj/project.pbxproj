@@ -25,6 +25,7 @@
 		A40669AE894750B7FDAF2402 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAAA1303B7A99A4AC3E1FA /* Keychain.swift */; };
 		BEEFBFBE5D51517B62E3CF2F /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413449A81F88616FDA185E5A /* EditorView.swift */; };
 		C2F21ED5D0FCA7195D5FBCA3 /* ScrimTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B0C9BF7FEA82A64C46435 /* ScrimTextView.swift */; };
+		F02CD17C7AC937D06BEAEE8A /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 013FE570CCE79C66BFE35570 /* Sparkle */; };
 		F688FA2764745059A575CA82 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497A9B917EEB39FBCAD594F6 /* Theme.swift */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,17 @@
 		E58DFC187E7392C5A6FC82CC /* SyncSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSheet.swift; sourceTree = "<group>"; };
 		F4003B1870C5DF494CA3598B /* SyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D03FB50581AB963D7F715779 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F02CD17C7AC937D06BEAEE8A /* Sparkle in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		0D981C4386FE2B113E001FEA /* Core */ = {
@@ -190,6 +202,7 @@
 			buildConfigurationList = 33B8D49054397E7E8C7B757F /* Build configuration list for PBXNativeTarget "GoodeMormingPages" */;
 			buildPhases = (
 				A211DDEF0ED8231065B60D0A /* Sources */,
+				D03FB50581AB963D7F715779 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -197,6 +210,7 @@
 			);
 			name = GoodeMormingPages;
 			packageProductDependencies = (
+				013FE570CCE79C66BFE35570 /* Sparkle */,
 			);
 			productName = GoodeMormingPages;
 			productReference = C350353AE9277625D36FC0D0 /* GoodeMormingPages.app */;
@@ -230,6 +244,9 @@
 			);
 			mainGroup = 249878FAFB0FA8857B4AC315;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				29B73F0AFE48F2EA04A16C9C /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 42A8450BE9706B61A10F7564 /* Products */;
 			projectDirPath = "";
@@ -365,7 +382,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0.1.0;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -430,7 +447,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0.1.0;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -514,6 +531,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		29B73F0AFE48F2EA04A16C9C /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		013FE570CCE79C66BFE35570 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 29B73F0AFE48F2EA04A16C9C /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A6864991045EC0222697E592 /* Project object */;
 }

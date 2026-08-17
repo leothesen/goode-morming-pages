@@ -60,6 +60,37 @@ xcodebuild -scheme GoodeMormingPages -configuration Debug \
 Requires Xcode 26 and macOS 26 — the app targets Liquid Glass APIs that do not
 exist in earlier toolchains.
 
+## Releasing
+
+Publish a release on GitHub with a `v*` tag. That fires `.github/workflows/release.yml`,
+which builds, packages with `ditto`, signs with Sparkle's EdDSA key, writes
+`appcast.xml`, commits it back to `main`, and attaches the app to the release.
+Every running copy notices within a day, or immediately via
+**Goode Morming Pages → Check for Updates…**
+
+From the CLI:
+
+```sh
+gh release create v0.2.0 --generate-notes
+```
+
+Note it must be a *release*, not a bare `git push --tags` — the workflow listens
+for `release: published`.
+
+### Things that will bite
+
+- **The repo must stay public.** The appcast is fetched from
+  `raw.githubusercontent.com` with no credentials, and Sparkle treats a failed
+  feed fetch as "no update available" without a word. The release job ends by
+  fetching the feed and asserting it is both reachable and signed.
+- **`CURRENT_PROJECT_VERSION` must sort correctly.** Sparkle compares
+  `CFBundleVersion`. It is kept as the same semver string as `MARKETING_VERSION`
+  precisely so `0.2.0` beats `0.1.1`. A bare integer baseline like `1` would make
+  every semver release look older, and updates would silently never appear.
+- **`SPARKLE_PRIVATE_KEY`** is a repo secret. It is the same key the walkingpad
+  app uses — Sparkle's own guidance is one key per person, not per app. Lose it
+  and no installed copy can ever be updated again.
+
 ## Notes for later
 
 - Notion's API refuses browser origins (a CORS preflight returns 400 with no
@@ -67,5 +98,4 @@ exist in earlier toolchains.
   web page.
 - Page parents use `data_source_id` on API version `2026-03-11`. The older
   `database_id` shape fails on multi-source databases.
-- Sparkle auto-updates are not wired up yet. That needs the EdDSA keypair and the
-  release workflow.
+- Sparkle auto-updates are wired up; see Releasing above.

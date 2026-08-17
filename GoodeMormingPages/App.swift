@@ -1,7 +1,30 @@
+import Sparkle
 import SwiftUI
+
+/// Sparkle needs a real app lifecycle hook, which the SwiftUI `App` protocol
+/// doesn't provide, so the updater is started from an AppDelegate.
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    /// `startingUpdater: false` so nothing touches the network until the app has
+    /// actually finished launching.
+    static let updaterController = SPUStandardUpdaterController(
+        startingUpdater: false,
+        updaterDelegate: nil,
+        userDriverDelegate: nil
+    )
+
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        AppDelegate.updaterController.startUpdater()
+    }
+
+    /// One window, and closing it means you're done for the morning.
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        true
+    }
+}
 
 @main
 struct GoodeMormingPagesApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var preferences = Preferences.shared
 
     var body: some Scene {
@@ -17,6 +40,12 @@ struct GoodeMormingPagesApp: App {
             CommandGroup(replacing: .newItem) {}
             CommandGroup(replacing: .saveItem) {}
             CommandGroup(replacing: .printItem) {}
+
+            CommandGroup(after: .appInfo) {
+                Button("Check for Updates…") {
+                    AppDelegate.updaterController.checkForUpdates(nil)
+                }
+            }
 
             CommandMenu("Session") {
                 Button("Sync to Notion…") {

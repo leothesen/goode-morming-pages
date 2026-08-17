@@ -11,7 +11,10 @@ settings:
   base:
     SWIFT_VERSION: 5.0
     MARKETING_VERSION: 0.1.0
-    CURRENT_PROJECT_VERSION: 1
+    # Deliberately the same semver string, not a bare integer. Sparkle compares
+    # CFBundleVersion to decide whether an update is newer — and with a baseline
+    # of "1", a released "0.1.1" reads as OLDER and is silently never offered.
+    CURRENT_PROJECT_VERSION: 0.1.0
     CODE_SIGN_IDENTITY: "-"
     CODE_SIGN_STYLE: Manual
     DEVELOPMENT_TEAM: ""
@@ -20,12 +23,19 @@ settings:
     GENERATE_INFOPLIST_FILE: NO
     SWIFT_STRICT_CONCURRENCY: minimal
 
+packages:
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    from: 2.9.6
+
 targets:
   GoodeMormingPages:
     type: application
     platform: macOS
     sources:
       - path: GoodeMormingPages
+    dependencies:
+      - package: Sparkle
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: co.leothesen.GoodeMormingPages
@@ -51,6 +61,14 @@ targets:
         NSSupportsAutomaticTermination: true
         NSSupportsSuddenTermination: false
         ATSApplicationFontsPath: Fonts
+
+        # Sparkle. The feed is a plain unauthenticated URL, which only works
+        # because this repo is public — a private repo 404s here and Sparkle
+        # treats a failed feed fetch as "no update available", silently.
+        SUFeedURL: https://raw.githubusercontent.com/leothesen/goode-morming-pages/main/appcast.xml
+        SUPublicEDKey: iIiC1hCpKxreAP1k91BU66Buf4k2HNK7p8WyJuKM/vc=
+        SUEnableAutomaticChecks: true
+        SUAllowsAutomaticUpdates: true
 
   GoodeMormingPagesTests:
     type: bundle.unit-test

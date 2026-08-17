@@ -34,5 +34,13 @@
 	<true/>
 	<key>NSSupportsSuddenTermination</key>
 	<false/>
+	<key>SUAllowsAutomaticUpdates</key>
+	<true/>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/leothesen/goode-morming-pages/main/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>iIiC1hCpKxreAP1k91BU66Buf4k2HNK7p8WyJuKM/vc=</string>
 </dict>
 </plist>
