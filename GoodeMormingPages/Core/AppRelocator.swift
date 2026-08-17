@@ -9,16 +9,12 @@ import AppKit
 enum AppRelocator {
     private static let applications = "/Applications"
 
-    static var isRunningTests: Bool {
-        ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
-            || NSClassFromString("XCTestCase") != nil
-    }
 
     /// True when the running bundle is somewhere it shouldn't live permanently.
     static func shouldOfferMove(bundlePath: String = Bundle.main.bundlePath) -> Bool {
         // A modal alert in the test host blocks the run loop, and the test runner
         // then hangs before it can connect — which reads as an unrelated failure.
-        if isRunningTests { return false }
+        if RuntimeEnvironment.isRunningTests { return false }
         // Never nag during development.
         if bundlePath.contains("/DerivedData/") { return false }
         if bundlePath.contains("/.claude/") { return false }
