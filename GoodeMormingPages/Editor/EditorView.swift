@@ -12,12 +12,30 @@ struct EditorView: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.openSettings) private var openSettings
 
-    @State private var toolbarVisible = false
+    /// The toolbar is shown by the pointer being in the top strip, or on the
+    /// buttons themselves. Both are tracked, because a child view can take the
+    /// hover away from its parent — and a toolbar that vanishes as you reach for
+    /// it is worse than one that never appeared.
+    @State private var pointerNearTop = false
+    @State private var pointerOnToolbar = false
+
+    /// Set while typing, cleared by the next pointer movement.
+    @State private var chromeDismissed = false
+
     @State private var isActive = false
     @State private var showSyncSheet = false
     @State private var activityTask: Task<Void, Never>?
 
-    private var theme: Theme { Theme.forScheme(scheme) }
+    /// Resolved here rather than read back out of the environment after
+    /// `preferredColorScheme`, so the scrims and the caret can never be a frame
+    /// behind the ground they have to match exactly.
+    private var theme: Theme {
+        Theme.forScheme(preferences.appearance.resolved(system: scheme))
+    }
+
+    private var toolbarVisible: Bool {
+        (pointerNearTop || pointerOnToolbar) && !chromeDismissed
+    }
 
     var body: some View {
         ZStack {
@@ -44,19 +62,23 @@ struct EditorView: View {
                 onSettings: { openSettings() }
             )
             .padding(.top, 16)
-            .onHover { toolbarVisible = $0 }
+            .onHover { pointerOnToolbar = $0 }
         }
         .overlay(alignment: .bottom) {
             WordGoalBar(
                 count: model.wordCount,
                 goal: preferences.wordGoal,
+                hasHitGoal: model.hasHitGoal,
                 theme: theme
             )
         }
         .overlay(alignment: .bottomTrailing) {
             // Only once you've arrived — or always, when there is no goal and
             // the bar has nothing to fill.
-            if model.hasHitGoal || preferences.wordGoal == 0 {
+            if Metrics.showsWordCount(
+                hasHitGoal: model.hasHitGoal,
+                goal: preferences.wordGoal
+            ) {
                 WordCountView(
                     count: model.wordCount,
                     hasHitGoal: model.hasHitGoal,
@@ -69,14 +91,25 @@ struct EditorView: View {
             }
         }
         .animation(.easeOut(duration: 0.5), value: model.hasHitGoal)
-        .overlay(alignment: .top) {
+        .overlay(alignment: .bottom) {
             if let toast = model.toast {
-                ToastView(message: toast, theme: theme)
-                    .padding(.top, 16)
+                ToastView(toast: toast, theme: theme)
+                    .padding(.bottom, 16)
                     .transition(.opacity)
             }
         }
         .animation(.easeOut(duration: 0.3), value: model.toast)
+        .onContinuousHover(coordinateSpace: .local) { phase in
+            switch phase {
+            case .active(let point):
+                // Any movement means you are reaching for something, so it
+                // also undoes the dismissal that typing caused.
+                chromeDismissed = false
+                pointerNearTop = Metrics.isInToolbarZone(y: point.y)
+            case .ended:
+                pointerNearTop = false
+            }
+        }
         .onChange(of: model.text) { _, _ in
             model.textDidChange(goal: preferences.wordGoal)
             markActive()
@@ -114,7 +147,13 @@ struct EditorView: View {
     }
 
     /// The count lifts from 20% to 50% while you are writing, then settles back.
+    ///
+    /// Typing also puts the toolbar away. The hover strip is wide enough that
+    /// the pointer is often parked inside it by accident, and chrome sitting lit
+    /// above the page for a whole session is worse than chrome you have to go
+    /// and find. Moving the pointer brings it straight back.
     private func markActive() {
+        chromeDismissed = true
         isActive = true
         activityTask?.cancel()
         activityTask = Task {

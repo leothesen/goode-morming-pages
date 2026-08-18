@@ -34,11 +34,26 @@ struct SettingsView: View {
             Section {
                 TextField("Words", value: $preferences.wordGoal, format: .number)
                     .frame(width: 90)
-                Text("The count turns green when you get there. Set 0 to hide the target and just show the count.")
+                Text("A line fills across the foot of the window as you write, and turns green when you get there. The count itself only appears once you have arrived. Set 0 to hide the line and show the count the whole time.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } header: {
                 Text("Daily goal")
+            }
+
+            Section {
+                Picker("Appearance", selection: $preferences.appearance) {
+                    ForEach(Appearance.allCases) { option in
+                        Text(option.label).tag(option)
+                    }
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                Text("macOS switches on sunrise, which is usually later than you start.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("Appearance")
             }
 
             Section {

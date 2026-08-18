@@ -31,6 +31,7 @@ struct GoodeMormingPagesApp: App {
     var body: some Scene {
         Window("Goode Morming Pages", id: "editor") {
             EditorView(preferences: preferences)
+                .preferredColorScheme(preferences.appearance.colorScheme)
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentMinSize)
@@ -63,6 +64,7 @@ struct GoodeMormingPagesApp: App {
 
         Settings {
             SettingsView(preferences: preferences)
+                .preferredColorScheme(preferences.appearance.colorScheme)
         }
     }
 }

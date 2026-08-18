@@ -64,22 +64,3 @@ final class EmojiCatalogTests: XCTestCase {
         XCTAssertTrue(regional.isEmpty)
     }
 }
-
-final class WordGoalTests: XCTestCase {
-
-    func testCountIsHiddenUntilTheGoalIsMet() {
-        // The bar carries progress; the number only appears on arrival. This
-        // pins the rule the view relies on.
-        XCTAssertFalse(shouldShowCount(hasHitGoal: false, goal: 300))
-        XCTAssertTrue(shouldShowCount(hasHitGoal: true, goal: 300))
-    }
-
-    func testCountAlwaysShowsWhenThereIsNoGoal() {
-        // With no goal the bar has nothing to fill, so the number is all there is.
-        XCTAssertTrue(shouldShowCount(hasHitGoal: false, goal: 0))
-    }
-
-    private func shouldShowCount(hasHitGoal: Bool, goal: Int) -> Bool {
-        hasHitGoal || goal == 0
-    }
-}

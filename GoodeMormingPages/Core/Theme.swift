@@ -35,6 +35,35 @@ struct Theme {
     static func forScheme(_ scheme: ColorScheme) -> Theme {
         scheme == .dark ? .dark : .light
     }
+
+    /// The colour of the goal line.
+    ///
+    /// Green once you have arrived, and it stays green for the session --
+    /// `hasHitGoal` is latched, so deleting a word does not take the morning
+    /// back off you.
+    func goalBarColor(hasHitGoal: Bool) -> Color {
+        hasHitGoal ? goalMet : ink
+    }
+}
+
+extension Appearance {
+    /// What to hand `preferredColorScheme`. `nil` means "leave it to macOS".
+    var colorScheme: ColorScheme? {
+        switch self {
+        case .system: return nil
+        case .light: return .light
+        case .dark: return .dark
+        }
+    }
+
+    /// The scheme to actually draw with, given what the system is currently on.
+    ///
+    /// The editor resolves this itself rather than reading the environment back
+    /// out after `preferredColorScheme`, so the scrims and the caret can never
+    /// be a frame behind the ground they have to match exactly.
+    func resolved(system: ColorScheme) -> ColorScheme {
+        colorScheme ?? system
+    }
 }
 
 extension Color {
