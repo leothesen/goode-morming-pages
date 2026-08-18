@@ -1,22 +1,51 @@
 import SwiftUI
 
-/// The word count, and the only feedback the app ever gives you.
+/// Progress toward the day's goal, as a hairline across the foot of the window.
 ///
-/// Plain text on purpose. This sits over the writing canvas, and a glass capsule
-/// around a number in the corner of an empty page is noise wearing a material.
-struct WordCountView: View {
+/// A number you can read is a number you can do arithmetic against, and doing
+/// arithmetic about how much is left is the opposite of writing. A line that
+/// reaches the right-hand edge says the same thing without inviting the sum.
+///
+/// The count itself only appears once you have arrived, when it stops being a
+/// target and becomes a fact.
+struct WordGoalBar: View {
     let count: Int
     let goal: Int
+    let theme: Theme
+
+    /// Clamped, so writing past the goal doesn't overflow the window.
+    private var fraction: Double {
+        guard goal > 0 else { return 0 }
+        return min(Double(count) / Double(goal), 1)
+    }
+
+    var body: some View {
+        GeometryReader { proxy in
+            Rectangle()
+                .fill(theme.ink)
+                .frame(width: proxy.size.width * fraction, height: 2)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(height: 2)
+        .animation(.easeOut(duration: 0.45), value: fraction)
+        .allowsHitTesting(false)
+    }
+}
+
+/// The word count, shown only once the goal is met — or always, if there is no
+/// goal set, since then the bar has nothing to fill.
+struct WordCountView: View {
+    let count: Int
     let hasHitGoal: Bool
     let isActive: Bool
     let theme: Theme
 
     var body: some View {
-        Text(goal > 0 ? "\(count) / \(goal)" : "\(count)")
+        Text(count == 1 ? "1 word" : "\(count) words")
             .font(.system(size: 13))
             .monospacedDigit()
-            .foregroundStyle(hasHitGoal ? theme.goalMet : theme.ink)
-            .opacity(hasHitGoal ? 1 : (isActive ? 0.5 : 0.2))
+            .foregroundStyle(theme.ink)
+            .opacity(hasHitGoal ? 0.55 : (isActive ? 0.5 : 0.2))
             .animation(.easeOut(duration: 0.4), value: isActive)
             .animation(.easeOut(duration: 0.4), value: hasHitGoal)
     }
