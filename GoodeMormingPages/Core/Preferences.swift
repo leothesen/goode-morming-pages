@@ -105,7 +105,7 @@ final class Preferences: ObservableObject {
         defaults.register(defaults: [
             Key.wordGoal: 300,
             Key.smartQuotes: true,
-            Key.defaultTags: ["morning-pages"],
+            Key.defaultTags: ["Morning pages"],
             Key.lastEmoji: "🌅",
         ])
         wordGoal = defaults.integer(forKey: Key.wordGoal)
@@ -120,9 +120,16 @@ final class Preferences: ObservableObject {
         tagPropertyKey = defaults.string(forKey: Key.tagProperty)
         tagAllowsMultiple = defaults.bool(forKey: Key.tagAllowsMultiple)
         tagOptions = defaults.stringArray(forKey: Key.tagOptions) ?? []
-        defaultTags = defaults.stringArray(forKey: Key.defaultTags) ?? ["morning-pages"]
+        defaultTags = defaults.stringArray(forKey: Key.defaultTags) ?? ["Morning pages"]
         lastEmoji = defaults.string(forKey: Key.lastEmoji) ?? "🌅"
         declinedRelocation = defaults.bool(forKey: Key.declinedRelocation)
+
+        // The first default was "morning-pages", which did not match the
+        // "Morning pages" already in Notion — so syncing created a duplicate tag
+        // beside the real one rather than using it.
+        if defaultTags == ["morning-pages"] {
+            defaultTags = ["Morning pages"]
+        }
     }
 
     var isConfigured: Bool {
@@ -136,6 +143,13 @@ final class Preferences: ObservableObject {
         tagPropertyKey = destination.tagProperty?.key
         tagAllowsMultiple = destination.tagProperty?.allowsMultiple ?? false
         tagOptions = destination.tagProperty?.options ?? []
+
+        // Snap the defaults onto Notion's own spelling. Notion creates any name
+        // it has not seen, so "morning pages" against an existing "Morning
+        // pages" would quietly add a second, near-identical tag.
+        defaultTags = defaultTags.map { tag in
+            tagOptions.first { $0.caseInsensitiveCompare(tag) == .orderedSame } ?? tag
+        }
     }
 
     /// Pulls the destination's schema again in the background.

@@ -29,6 +29,7 @@
 		A40669AE894750B7FDAF2402 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BAAA1303B7A99A4AC3E1FA /* Keychain.swift */; };
 		BEEFBFBE5D51517B62E3CF2F /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413449A81F88616FDA185E5A /* EditorView.swift */; };
 		C2F21ED5D0FCA7195D5FBCA3 /* ScrimTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B0C9BF7FEA82A64C46435 /* ScrimTextView.swift */; };
+		D684A9B0AB544C9EB875B919 /* EmojiCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0905800D8FEA05E32345AF8E /* EmojiCatalogTests.swift */; };
 		F02CD17C7AC937D06BEAEE8A /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = 013FE570CCE79C66BFE35570 /* Sparkle */; };
 		F688FA2764745059A575CA82 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497A9B917EEB39FBCAD594F6 /* Theme.swift */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0905800D8FEA05E32345AF8E /* EmojiCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCatalogTests.swift; sourceTree = "<group>"; };
 		2FBC00785193BCD2BB22C0DB /* RuntimeEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeEnvironment.swift; sourceTree = "<group>"; };
 		36E01422E41E16063B908300 /* BlockBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockBuilderTests.swift; sourceTree = "<group>"; };
 		413449A81F88616FDA185E5A /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 			children = (
 				36E01422E41E16063B908300 /* BlockBuilderTests.swift */,
 				D8AB76708696AC3FBB1AB58D /* EditorLogicTests.swift */,
+				0905800D8FEA05E32345AF8E /* EmojiCatalogTests.swift */,
 			);
 			path = GoodeMormingPagesTests;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 			files = (
 				6F4DADCBC64C0338F711A175 /* BlockBuilderTests.swift in Sources */,
 				32A54AD6F7374549122AE2B1 /* EditorLogicTests.swift in Sources */,
+				D684A9B0AB544C9EB875B919 /* EmojiCatalogTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

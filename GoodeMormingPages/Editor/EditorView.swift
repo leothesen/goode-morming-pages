@@ -46,16 +46,29 @@ struct EditorView: View {
             .padding(.top, 16)
             .onHover { toolbarVisible = $0 }
         }
-        .overlay(alignment: .bottomTrailing) {
-            WordCountView(
+        .overlay(alignment: .bottom) {
+            WordGoalBar(
                 count: model.wordCount,
                 goal: preferences.wordGoal,
-                hasHitGoal: model.hasHitGoal,
-                isActive: isActive,
                 theme: theme
             )
-            .padding(20)
         }
+        .overlay(alignment: .bottomTrailing) {
+            // Only once you've arrived — or always, when there is no goal and
+            // the bar has nothing to fill.
+            if model.hasHitGoal || preferences.wordGoal == 0 {
+                WordCountView(
+                    count: model.wordCount,
+                    hasHitGoal: model.hasHitGoal,
+                    isActive: isActive,
+                    theme: theme
+                )
+                .padding(.horizontal, 20)
+                .padding(.bottom, 14)
+                .transition(.opacity)
+            }
+        }
+        .animation(.easeOut(duration: 0.5), value: model.hasHitGoal)
         .overlay(alignment: .top) {
             if let toast = model.toast {
                 ToastView(message: toast, theme: theme)

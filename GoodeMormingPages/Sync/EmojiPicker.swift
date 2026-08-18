@@ -1,85 +1,87 @@
 import SwiftUI
 
-/// The emoji offered in the picker, with keywords so search finds them.
+/// Every emoji the system can render, with its Unicode name for searching.
 ///
-/// A curated set rather than the whole Unicode table: this is a journal, and a
-/// grid you can scan beats one you have to search. Anything not here can still
-/// be pasted into the search field directly.
+/// This used to be a hand-curated list of about sixty, which meant searching for
+/// anything outside it — a gear, a seal, a traffic light — returned "nothing
+/// matches" even though the emoji plainly exists. Enumerating the Unicode ranges
+/// costs nothing to maintain and gives real name search for free.
 enum EmojiCatalog {
-    struct Entry: Hashable {
+    struct Entry: Hashable, Identifiable {
         let emoji: String
-        let keywords: String
+        let name: String
+        var id: String { emoji }
     }
 
-    static let all: [Entry] = [
-        .init(emoji: "🌅", keywords: "sunrise morning dawn"),
-        .init(emoji: "🌄", keywords: "sunrise mountain morning"),
-        .init(emoji: "☀️", keywords: "sun day bright"),
-        .init(emoji: "🌤", keywords: "sun cloud weather"),
-        .init(emoji: "🌊", keywords: "wave sea ocean surf"),
-        .init(emoji: "🌙", keywords: "moon night late"),
-        .init(emoji: "⭐️", keywords: "star night"),
-        .init(emoji: "✨", keywords: "sparkles magic good"),
-        .init(emoji: "🔥", keywords: "fire hot streak"),
-        .init(emoji: "🌱", keywords: "seedling growth new start"),
-        .init(emoji: "🌳", keywords: "tree nature calm"),
-        .init(emoji: "🍂", keywords: "leaves autumn fall"),
-        .init(emoji: "☕️", keywords: "coffee morning cup"),
-        .init(emoji: "🍵", keywords: "tea calm cup"),
-        .init(emoji: "📝", keywords: "memo write note pencil"),
-        .init(emoji: "✍️", keywords: "writing hand pen"),
-        .init(emoji: "📖", keywords: "book open read"),
-        .init(emoji: "📓", keywords: "notebook journal"),
-        .init(emoji: "📔", keywords: "notebook journal decorated"),
-        .init(emoji: "🖋", keywords: "pen fountain ink"),
-        .init(emoji: "🗒", keywords: "notepad list"),
-        .init(emoji: "🧠", keywords: "brain think mind"),
-        .init(emoji: "💭", keywords: "thought bubble thinking"),
-        .init(emoji: "💡", keywords: "idea lightbulb insight"),
-        .init(emoji: "🎯", keywords: "target goal focus"),
-        .init(emoji: "🧩", keywords: "puzzle piece problem"),
-        .init(emoji: "🪞", keywords: "mirror reflection self"),
-        .init(emoji: "🧘", keywords: "meditation calm zen"),
-        .init(emoji: "❤️", keywords: "heart love"),
-        .init(emoji: "💔", keywords: "broken heart sad hurt"),
-        .init(emoji: "🙏", keywords: "gratitude thanks pray"),
-        .init(emoji: "😀", keywords: "happy smile good"),
-        .init(emoji: "🙂", keywords: "slight smile fine ok"),
-        .init(emoji: "😐", keywords: "neutral flat meh"),
-        .init(emoji: "😔", keywords: "sad down low"),
-        .init(emoji: "😤", keywords: "frustrated angry steam"),
-        .init(emoji: "😴", keywords: "sleep tired rest"),
-        .init(emoji: "🤯", keywords: "mind blown overwhelmed"),
-        .init(emoji: "🥲", keywords: "bittersweet tears smile"),
-        .init(emoji: "🫥", keywords: "invisible absent numb"),
-        .init(emoji: "🏃", keywords: "running exercise move"),
-        .init(emoji: "🚶", keywords: "walking slow think"),
-        .init(emoji: "🏔", keywords: "mountain climb hard"),
-        .init(emoji: "🧭", keywords: "compass direction plan"),
-        .init(emoji: "⚓️", keywords: "anchor steady ground"),
-        .init(emoji: "🔑", keywords: "key unlock answer"),
-        .init(emoji: "🪟", keywords: "window clarity view"),
-        .init(emoji: "🕯", keywords: "candle quiet still"),
-        .init(emoji: "📅", keywords: "calendar date day"),
-        .init(emoji: "⏳", keywords: "hourglass time waiting"),
-        .init(emoji: "🎧", keywords: "headphones music listen"),
-        .init(emoji: "🎸", keywords: "guitar music play"),
-        .init(emoji: "🏡", keywords: "home house family"),
-        .init(emoji: "✈️", keywords: "plane travel away"),
-        .init(emoji: "💼", keywords: "work briefcase job"),
-        .init(emoji: "💰", keywords: "money finance"),
-        .init(emoji: "🩺", keywords: "health doctor body"),
-        .init(emoji: "🌧", keywords: "rain grey weather"),
-        .init(emoji: "❄️", keywords: "snow cold winter"),
-        .init(emoji: "🦭", keywords: "seal animal sea"),
+    /// Blocks that contain emoji. Non-emoji scalars inside them are filtered out
+    /// below, so being generous here is safe.
+    private static let ranges: [ClosedRange<UInt32>] = [
+        0x00A9...0x00AE,    // copyright, registered
+        0x203C...0x2049,    // double exclamation, interrobang
+        0x2122...0x2139,    // trademark, information
+        0x2194...0x21AA,    // arrows
+        0x231A...0x231B,    // watch, hourglass
+        0x2328...0x2328,    // keyboard
+        0x23CF...0x23FA,    // media controls
+        0x24C2...0x24C2,    // circled M
+        0x25AA...0x25FE,    // geometric shapes
+        0x2600...0x27BF,    // miscellaneous symbols and dingbats
+        0x2934...0x2935,    // curved arrows
+        0x2B00...0x2BFF,    // arrows and stars
+        0x3030...0x303D,    // wavy dash, part alternation
+        0x3297...0x3299,    // congratulations, secret
+        0x1F000...0x1F0FF,  // mahjong, playing cards
+        0x1F100...0x1F1E5,  // enclosed alphanumerics, stopping before flags
+        0x1F200...0x1F2FF,  // enclosed ideographic
+        0x1F300...0x1F5FF,  // symbols and pictographs
+        0x1F600...0x1F64F,  // emoticons
+        0x1F680...0x1F6FF,  // transport and map
+        0x1F780...0x1F7FF,  // geometric extended, coloured shapes
+        0x1F900...0x1F9FF,  // supplemental
+        0x1FA00...0x1FAFF,  // extended-A
     ]
 
-    static func matching(_ query: String) -> [Entry] {
-        let trimmed = query.trimmingCharacters(in: .whitespaces).lowercased()
-        guard !trimmed.isEmpty else { return all }
-        return all.filter {
-            $0.keywords.contains(trimmed) || $0.emoji.contains(trimmed)
+    static let all: [Entry] = {
+        var seen = Set<String>()
+        var entries: [Entry] = []
+
+        for range in ranges {
+            for value in range {
+                guard let scalar = Unicode.Scalar(value) else { continue }
+                guard scalar.properties.isEmoji else { continue }
+                guard let name = scalar.properties.name else { continue }
+
+                // Filtering on isEmojiPresentation alone silently drops every
+                // emoji that defaults to text presentation — the gear, the
+                // aeroplane, the red heart. They need a variation selector to
+                // render in colour, so add one rather than excluding them.
+                let emoji = scalar.properties.isEmojiPresentation
+                    ? String(scalar)
+                    : String(scalar) + "\u{FE0F}"
+
+                guard seen.insert(emoji).inserted else { continue }
+                entries.append(Entry(emoji: emoji, name: name.lowercased()))
+            }
         }
+        return entries
+    }()
+
+    /// Variation selectors make two visually identical emoji compare unequal.
+    private static func normalised(_ text: String) -> String {
+        text.replacingOccurrences(of: "\u{FE0F}", with: "")
+    }
+
+    static func matching(_ query: String) -> [Entry] {
+        let trimmed = query.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return all }
+
+        // Pasting an emoji straight into the field should find it, not just
+        // typing its name — with or without a variation selector.
+        let pasted = normalised(trimmed)
+        if let direct = all.first(where: { normalised($0.emoji) == pasted }) {
+            return [direct]
+        }
+        return all.filter { $0.name.contains(trimmed.lowercased()) }
     }
 }
 
@@ -139,13 +141,17 @@ struct EmojiPickerButton: View {
             ScrollView {
                 let matches = EmojiCatalog.matching(query)
                 if matches.isEmpty {
-                    Text("Nothing matches “\(query)”.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .padding(.vertical, 20)
+                    VStack(spacing: 4) {
+                        Text("Nothing matches \u{201C}\(query)\u{201D}.")
+                        Text("Try a word like \u{201C}coffee\u{201D} or \u{201C}gear\u{201D}.")
+                            .foregroundStyle(.tertiary)
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.vertical, 24)
                 } else {
                     LazyVGrid(columns: columns, spacing: 4) {
-                        ForEach(matches, id: \.self) { entry in
+                        ForEach(matches) { entry in
                             Button {
                                 emoji = entry.emoji
                                 isOpen = false
@@ -161,12 +167,12 @@ struct EmojiPickerButton: View {
                                     )
                             }
                             .buttonStyle(.plain)
-                            .help(entry.keywords)
+                            .help(entry.name)
                         }
                     }
                 }
             }
-            .frame(height: 190)
+            .frame(height: 220)
         }
         .padding(10)
         .frame(width: 300)
