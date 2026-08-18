@@ -9,6 +9,27 @@ struct SpellingOptions: Equatable {
     var smartQuotes = true
 }
 
+/// What the app should look like, regardless of what the system is doing.
+///
+/// macOS switches appearance on sunrise, and this app is for the hour before
+/// it. Following the system means the app built to be used before dawn shows a
+/// near-white page at exactly the moment your eyes want it least.
+enum Appearance: String, CaseIterable, Identifiable {
+    case system
+    case light
+    case dark
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .system: return "System"
+        case .light: return "Light"
+        case .dark: return "Dark"
+        }
+    }
+}
+
 /// Everything that survives a relaunch except the Notion token, which lives in
 /// the Keychain instead.
 final class Preferences: ObservableObject {
@@ -28,6 +49,7 @@ final class Preferences: ObservableObject {
         static let defaultTags = "defaultTags"
         static let lastEmoji = "lastEmoji"
         static let declinedRelocation = "declinedRelocation"
+        static let appearance = "appearance"
     }
 
     /// The select column tags are written to, discovered when you pick a
@@ -70,6 +92,11 @@ final class Preferences: ObservableObject {
         )
     }
 
+    /// Light, dark, or whatever the system is doing.
+    @Published var appearance: Appearance {
+        didSet { defaults.set(appearance.rawValue, forKey: Key.appearance) }
+    }
+
     /// 300 a day. A goal of 0 means "just show the count, no target".
     @Published var wordGoal: Int {
         didSet { defaults.set(wordGoal, forKey: Key.wordGoal) }
@@ -109,6 +136,7 @@ final class Preferences: ObservableObject {
             Key.lastEmoji: "🌅",
         ])
         wordGoal = defaults.integer(forKey: Key.wordGoal)
+        appearance = Appearance(rawValue: defaults.string(forKey: Key.appearance) ?? "") ?? .system
         spelling = SpellingOptions(
             checkSpelling: defaults.bool(forKey: Key.checkSpelling),
             autocorrect: defaults.bool(forKey: Key.autocorrect),

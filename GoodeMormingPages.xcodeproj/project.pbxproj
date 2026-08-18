@@ -15,6 +15,7 @@
 		32A54AD6F7374549122AE2B1 /* EditorLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AB76708696AC3FBB1AB58D /* EditorLogicTests.swift */; };
 		3A7902D31B4AA7E0ECEA5C90 /* ChromeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0310D7FCD841FCB750D9C3 /* ChromeViews.swift */; };
 		5119F2E50C83AD23D64A93D2 /* EditorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A53E4D1AAC2605CD8634789 /* EditorModel.swift */; };
+		52CEE4573429C6291C545725 /* ChromeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F88A3C45E0246FFF979889 /* ChromeTests.swift */; };
 		54FD89DADCB4A5C898927DD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 469BB7C8A5B2BA71C526185F /* Assets.xcassets */; };
 		5DD35B919FC7B43E3FFDF76C /* WordCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0664841CB25F3779A2A1CF7 /* WordCount.swift */; };
 		622C75DD3358B11CA87A6B27 /* NotionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848CC1E2A8024798FEBB8CA /* NotionClient.swift */; };
@@ -72,6 +73,7 @@
 		D848CC1E2A8024798FEBB8CA /* NotionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionClient.swift; sourceTree = "<group>"; };
 		D8AB76708696AC3FBB1AB58D /* EditorLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorLogicTests.swift; sourceTree = "<group>"; };
 		E58DFC187E7392C5A6FC82CC /* SyncSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSheet.swift; sourceTree = "<group>"; };
+		F2F88A3C45E0246FFF979889 /* ChromeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChromeTests.swift; sourceTree = "<group>"; };
 		F4003B1870C5DF494CA3598B /* SyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				36E01422E41E16063B908300 /* BlockBuilderTests.swift */,
+				F2F88A3C45E0246FFF979889 /* ChromeTests.swift */,
 				D8AB76708696AC3FBB1AB58D /* EditorLogicTests.swift */,
 				0905800D8FEA05E32345AF8E /* EmojiCatalogTests.swift */,
 			);
@@ -320,6 +323,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F4DADCBC64C0338F711A175 /* BlockBuilderTests.swift in Sources */,
+				52CEE4573429C6291C545725 /* ChromeTests.swift in Sources */,
 				32A54AD6F7374549122AE2B1 /* EditorLogicTests.swift in Sources */,
 				D684A9B0AB544C9EB875B919 /* EmojiCatalogTests.swift in Sources */,
 			);

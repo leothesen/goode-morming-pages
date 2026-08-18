@@ -38,6 +38,57 @@ enum Metrics {
     /// directly above the caret is only dimmed.
     static let scrimOpacities: [CGFloat] = [0.98, 0.92, 0.85, 0.70]
 
+    // MARK: - The word goal
+
+    /// A hairline. Thin enough to read as a rule rather than a widget.
+    static let goalBarHeight: CGFloat = 2
+
+    /// The unreached part of the goal, drawn behind the fill.
+    ///
+    /// Without it the bar has zero width at zero words, so the empty morning
+    /// renders nothing at all -- indistinguishable from having no goal set.
+    static let goalBedOpacity: CGFloat = 0.09
+
+    /// How far the bar swells at the moment you arrive, scaled from its bottom
+    /// edge so the swell costs no layout.
+    static let goalSwellScale: CGFloat = 2.5
+
+    /// The rise, then the settle. A single beat: long enough to be seen, short
+    /// enough that it is over before it becomes a thing being watched.
+    static let goalSwellRise: Double = 0.25
+    static let goalSwellFall: Double = 0.4
+
+    /// How far through the goal you are, clamped so writing past it doesn't
+    /// overflow the window. A goal of zero has no fraction -- it isn't a goal.
+    static func goalFraction(count: Int, goal: Int) -> Double {
+        guard goal > 0, count > 0 else { return 0 }
+        return min(Double(count) / Double(goal), 1)
+    }
+
+    /// Whether to show the number as well as the line.
+    ///
+    /// The bar carries progress; the number only appears once you have arrived,
+    /// when it stops being a target and becomes a fact. With no goal set the bar
+    /// has nothing to fill, so the number is all there is.
+    static func showsWordCount(hasHitGoal: Bool, goal: Int) -> Bool {
+        hasHitGoal || goal == 0
+    }
+
+    // MARK: - The toolbar
+
+    /// The band at the top of the window that reveals the toolbar.
+    ///
+    /// The controls themselves are invisible until shown, so making them their
+    /// own hover target means you have to already know where they are. Sensing
+    /// the whole strip makes "move the pointer up" work, which is what everyone
+    /// does when they want the chrome back.
+    static let toolbarHoverHeight: CGFloat = 72
+
+    /// Whether a point in the editor's coordinate space should show the toolbar.
+    static func isInToolbarZone(y: CGFloat) -> Bool {
+        y >= 0 && y <= toolbarHoverHeight
+    }
+
     /// Where the caret's line should sit so that it lands in the one uncovered
     /// slot at the bottom of the window.
     ///
