@@ -1,3 +1,4 @@
+import CoreText
 import SwiftUI
 
 /// Progress toward the day's goal, as a hairline across the foot of the window.
@@ -97,16 +98,20 @@ struct WordCountView: View {
     }
 }
 
-/// Sync, Copy and Settings. Chrome in the truest sense: gone until wanted.
+/// Sync, Copy, Prompt and Settings. Chrome in the truest sense: gone until wanted.
 ///
 /// Liquid Glass belongs here — it floats above the page and disappears. The
-/// three buttons share a `GlassEffectContainer` so they read as one control
-/// rather than three separate blobs.
+/// buttons share a `GlassEffectContainer` so they read as one control rather
+/// than separate blobs.
+///
+/// How it fades is `chromeFade`, applied by the editor to the toolbar and the
+/// prompt together, so the two can never be out of step.
 struct EditorToolbar: View {
-    let isVisible: Bool
     let canSync: Bool
+    let showsPrompt: Bool
     let onSync: () -> Void
     let onCopy: () -> Void
+    let onPrompt: () -> Void
     let onSettings: () -> Void
 
     var body: some View {
@@ -123,6 +128,14 @@ struct EditorToolbar: View {
                 }
                 .help("Copy the whole session to the clipboard")
 
+                Button(action: onPrompt) {
+                    Label(
+                        showsPrompt ? "Hide Prompt" : "Show Prompt",
+                        systemImage: showsPrompt ? "text.bubble.fill" : "text.bubble"
+                    )
+                }
+                .help(showsPrompt ? "Put the prompt away" : "Show a journal prompt (\u{2318}')")
+
                 Button(action: onSettings) {
                     Label("Settings", systemImage: "gearshape")
                 }
@@ -131,14 +144,89 @@ struct EditorToolbar: View {
             .labelStyle(.iconOnly)
             .buttonStyle(.glass)
         }
-        .opacity(isVisible ? 1 : 0)
-        .blur(radius: isVisible ? 0 : 4)
-        .offset(y: isVisible ? 0 : -12)
-        // Faded out it is still a live target, and clicking a control you cannot
-        // see is never what anyone meant to do.
-        .allowsHitTesting(isVisible)
-        .accessibilityHidden(!isVisible)
-        .animation(.easeOut(duration: 0.45), value: isVisible)
+    }
+}
+
+/// A question to write toward, under the toolbar and fading with it.
+///
+/// Deliberately not glass and not a card. It is set in the page's own serif,
+/// a little smaller and lighter than your writing, so it reads as part of the
+/// morning rather than another control.
+///
+/// Everything here is a fixed size, so that › never moves: the question always
+/// takes a two-line box, and the label between the arrows is a fixed width.
+struct PromptView: View {
+    let prompt: Prompt
+    let position: Int
+    let count: Int
+    let theme: Theme
+    let onPrevious: () -> Void
+    let onNext: () -> Void
+
+    var body: some View {
+        VStack(spacing: 8) {
+            ZStack(alignment: .bottom) {
+                Text(prompt.text)
+                    .font(Font(Typeface.editor(size: Metrics.promptFontSize) as CTFont).italic())
+                    .foregroundStyle(theme.ink.opacity(0.72))
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+                    .id(prompt.text)
+                    .transition(.opacity)
+            }
+            .frame(
+                width: Metrics.promptWidth,
+                height: Metrics.promptHeight,
+                alignment: .bottom
+            )
+            .animation(.easeOut(duration: 0.25), value: prompt.text)
+
+            HStack(spacing: 0) {
+                arrow("chevron.left", label: "Previous prompt", action: onPrevious)
+
+                Text("\(prompt.theme) \u{00B7} \(position) of \(count)")
+                    .font(.system(size: 11))
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .frame(width: Metrics.promptLabelWidth)
+                    .accessibilityLabel("\(prompt.theme), \(position) of \(count)")
+
+                arrow("chevron.right", label: "Next prompt", action: onNext)
+            }
+            .foregroundStyle(theme.ink.opacity(0.45))
+        }
+    }
+
+    private func arrow(
+        _ symbol: String,
+        label: String,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            Image(systemName: symbol)
+                .font(.system(size: 11, weight: .semibold))
+                .frame(width: 28, height: 22)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label)
+    }
+}
+
+extension View {
+    /// How the chrome comes and goes: a fade, a slight blur and a small lift.
+    ///
+    /// Faded out it is still a live target, and clicking a control you cannot
+    /// see is never what anyone meant to do, so hit testing goes with it.
+    func chromeFade(isVisible: Bool) -> some View {
+        opacity(isVisible ? 1 : 0)
+            .blur(radius: isVisible ? 0 : 4)
+            .offset(y: isVisible ? 0 : -12)
+            .allowsHitTesting(isVisible)
+            .accessibilityHidden(!isVisible)
+            .animation(.easeOut(duration: 0.45), value: isVisible)
     }
 }
 

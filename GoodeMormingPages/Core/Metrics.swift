@@ -89,6 +89,29 @@ enum Metrics {
         y >= 0 && y <= toolbarHoverHeight
     }
 
+    // MARK: - The prompt
+
+    /// A little under the page's own size, so the question reads as a voice in
+    /// the room rather than the first line of your answer.
+    static let promptFontSize: CGFloat = 19
+
+    /// The same measure as the writing, so the question sits over the page.
+    static let promptWidth: CGFloat = measure
+
+    /// Always two lines tall, whether the prompt needs one line or two.
+    ///
+    /// The ‹ › row sits under this box, so a fixed box is what keeps › in the
+    /// same place from one prompt to the next. You can click through a dozen
+    /// without moving the pointer.
+    static let promptHeight: CGFloat = promptFontSize * 2.8
+
+    /// Fixed for the same reason: a label that sized to its text would slide
+    /// the arrows sideways every time the theme name changed length.
+    static let promptLabelWidth: CGFloat = 220
+
+    /// Between the buttons and the question.
+    static let promptSpacing: CGFloat = 18
+
     /// Where the caret's line should sit so that it lands in the one uncovered
     /// slot at the bottom of the window.
     ///
