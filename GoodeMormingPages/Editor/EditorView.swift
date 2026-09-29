@@ -3,11 +3,13 @@ import SwiftUI
 extension Notification.Name {
     static let requestSync = Notification.Name("co.leothesen.gmp.requestSync")
     static let requestCopy = Notification.Name("co.leothesen.gmp.requestCopy")
+    static let requestNextPrompt = Notification.Name("co.leothesen.gmp.requestNextPrompt")
 }
 
 struct EditorView: View {
     @ObservedObject var preferences: Preferences
     @StateObject private var model = EditorModel()
+    @StateObject private var deck = PromptDeck()
 
     @Environment(\.colorScheme) private var scheme
     @Environment(\.openSettings) private var openSettings
@@ -22,6 +24,13 @@ struct EditorView: View {
     /// Set while typing, cleared by the next pointer movement.
     @State private var chromeDismissed = false
 
+    /// Set by ⌘' so the prompt it just dealt can be seen without reaching
+    /// for the pointer. Cleared by the next keystroke, like everything else.
+    @State private var chromeSummoned = false
+
+    /// Off at every launch. Prompts are there when you ask, never by default.
+    @State private var showsPrompt = false
+
     @State private var isActive = false
     @State private var showSyncSheet = false
     @State private var activityTask: Task<Void, Never>?
@@ -34,7 +43,7 @@ struct EditorView: View {
     }
 
     private var toolbarVisible: Bool {
-        (pointerNearTop || pointerOnToolbar) && !chromeDismissed
+        (pointerNearTop || pointerOnToolbar || chromeSummoned) && !chromeDismissed
     }
 
     var body: some View {
@@ -54,13 +63,33 @@ struct EditorView: View {
             .offset(y: Metrics.verticalOffset)
         }
         .overlay(alignment: .top) {
-            EditorToolbar(
-                isVisible: toolbarVisible,
-                canSync: !model.text.isEmpty && !model.isSyncing,
-                onSync: { showSyncSheet = true },
-                onCopy: { model.copyAll() },
-                onSettings: { openSettings() }
-            )
+            VStack(spacing: Metrics.promptSpacing) {
+                EditorToolbar(
+                    canSync: !model.text.isEmpty && !model.isSyncing,
+                    showsPrompt: showsPrompt,
+                    onSync: { showSyncSheet = true },
+                    onCopy: { model.copyAll() },
+                    onPrompt: togglePrompt,
+                    onSettings: { openSettings() }
+                )
+
+                if showsPrompt {
+                    PromptView(
+                        prompt: deck.current,
+                        position: deck.displayPosition,
+                        count: deck.prompts.count,
+                        theme: theme,
+                        onPrevious: { deck.previous() },
+                        onNext: { deck.next() }
+                    )
+                    .transition(.opacity)
+                }
+            }
+            .animation(.easeOut(duration: 0.35), value: showsPrompt)
+            // The gap between the buttons and the question counts as being on
+            // the chrome, so travelling down to › doesn't fade it on the way.
+            .contentShape(Rectangle())
+            .chromeFade(isVisible: toolbarVisible)
             .padding(.top, 16)
             .onHover { pointerOnToolbar = $0 }
         }
@@ -128,6 +157,9 @@ struct EditorView: View {
         .onReceive(NotificationCenter.default.publisher(for: .requestCopy)) { _ in
             model.copyAll()
         }
+        .onReceive(NotificationCenter.default.publisher(for: .requestNextPrompt)) { _ in
+            nextPromptFromKeyboard()
+        }
         .sheet(isPresented: $showSyncSheet) {
             SyncSheet(
                 wordCount: model.wordCount,
@@ -154,12 +186,32 @@ struct EditorView: View {
     /// and find. Moving the pointer brings it straight back.
     private func markActive() {
         chromeDismissed = true
+        chromeSummoned = false
         isActive = true
         activityTask?.cancel()
         activityTask = Task {
             try? await Task.sleep(nanoseconds: 1_200_000_000)
             if !Task.isCancelled { isActive = false }
         }
+    }
+
+    private func togglePrompt() {
+        showsPrompt.toggle()
+        if showsPrompt { deck.reveal() }
+    }
+
+    /// ⌘' deals the next prompt and brings the chrome up to show it, so you
+    /// can go through several without touching the pointer. The first press
+    /// of a session only turns prompts on.
+    private func nextPromptFromKeyboard() {
+        if showsPrompt {
+            deck.next()
+        } else {
+            showsPrompt = true
+            deck.reveal()
+        }
+        chromeDismissed = false
+        chromeSummoned = true
     }
 
     private func performSync(options: SyncOptions) {

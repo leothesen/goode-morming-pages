@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A24176833A5CB70E76DFA417 /* PromptDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8CFE89B4F0B08104209392 /* PromptDeck.swift */; };
+		F9CC7B7770229454E17E8B4E /* PromptLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0956908D3747C10F1758908 /* PromptLibrary.swift */; };
+		060ADEF62102E45FEB902680 /* PromptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4382E67EDAE99297BEC7452 /* PromptTests.swift */; };
 		125B294FB3845601C7DCF999 /* EmojiPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76D40AE2CA0145F9A4844B7 /* EmojiPicker.swift */; };
 		1519150A4EA6209AA0E1D0B2 /* BufferStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F926760E71EEAA8552664A /* BufferStore.swift */; };
 		1CA432AB4D31A708DF62813C /* SyncSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58DFC187E7392C5A6FC82CC /* SyncSheet.swift */; };
@@ -46,6 +49,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9A8CFE89B4F0B08104209392 /* PromptDeck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptDeck.swift; sourceTree = "<group>"; };
+		B0956908D3747C10F1758908 /* PromptLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptLibrary.swift; sourceTree = "<group>"; };
+		D4382E67EDAE99297BEC7452 /* PromptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptTests.swift; sourceTree = "<group>"; };
 		0905800D8FEA05E32345AF8E /* EmojiCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCatalogTests.swift; sourceTree = "<group>"; };
 		2FBC00785193BCD2BB22C0DB /* RuntimeEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeEnvironment.swift; sourceTree = "<group>"; };
 		36E01422E41E16063B908300 /* BlockBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockBuilderTests.swift; sourceTree = "<group>"; };
@@ -89,6 +95,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A4FFA79B1C8A890BDB1B923 /* Prompts */ = {
+			isa = PBXGroup;
+			children = (
+				9A8CFE89B4F0B08104209392 /* PromptDeck.swift */,
+				B0956908D3747C10F1758908 /* PromptLibrary.swift */,
+			);
+			path = Prompts;
+			sourceTree = "<group>";
+		};
 		0D981C4386FE2B113E001FEA /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +126,7 @@
 				F2F88A3C45E0246FFF979889 /* ChromeTests.swift */,
 				D8AB76708696AC3FBB1AB58D /* EditorLogicTests.swift */,
 				0905800D8FEA05E32345AF8E /* EmojiCatalogTests.swift */,
+				D4382E67EDAE99297BEC7452 /* PromptTests.swift */,
 			);
 			path = GoodeMormingPagesTests;
 			sourceTree = "<group>";
@@ -159,6 +175,7 @@
 				0D981C4386FE2B113E001FEA /* Core */,
 				3F166799C5B27660756ADD00 /* Editor */,
 				665129E828664A8B44A7F731 /* Notion */,
+				8A4FFA79B1C8A890BDB1B923 /* Prompts */,
 				8D66DFFE8A8BA8CB0F942F39 /* Settings */,
 				9005BC930F114360685D5AA2 /* Sync */,
 				8E56BEB8D674B4B2F237C28C /* App.swift */,
@@ -307,6 +324,8 @@
 				6463E0012C6DC3375DCBE27B /* Metrics.swift in Sources */,
 				622C75DD3358B11CA87A6B27 /* NotionClient.swift in Sources */,
 				6FEC02A3CDEFFB59A2B1B0C2 /* Preferences.swift in Sources */,
+				A24176833A5CB70E76DFA417 /* PromptDeck.swift in Sources */,
+				F9CC7B7770229454E17E8B4E /* PromptLibrary.swift in Sources */,
 				8A9FE39A565549B8834B3B2C /* RuntimeEnvironment.swift in Sources */,
 				800438E0EBDC2A3DEE223E40 /* ScrimOverlay.swift in Sources */,
 				C2F21ED5D0FCA7195D5FBCA3 /* ScrimTextView.swift in Sources */,
@@ -326,6 +345,7 @@
 				52CEE4573429C6291C545725 /* ChromeTests.swift in Sources */,
 				32A54AD6F7374549122AE2B1 /* EditorLogicTests.swift in Sources */,
 				D684A9B0AB544C9EB875B919 /* EmojiCatalogTests.swift in Sources */,
+				060ADEF62102E45FEB902680 /* PromptTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

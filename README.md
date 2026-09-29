@@ -25,6 +25,24 @@ The buffer is bottom-anchored: the caret's line always lands in the single
 uncovered slot, even on a blank page. Ensō leaves your first line under the
 heaviest scrim until you have written five of them.
 
+## Prompts
+
+A speech-bubble button in the toolbar shows a journal prompt beneath it, set in
+the page's serif. It is off at every launch and never appears unless you ask. It
+fades with the toolbar: typing puts both away, and moving the pointer brings them
+back. Prompts are never synced or copied; only what you wrote is.
+
+‹ and › step through a shuffled deck of 425 prompts in seventeen themes, the
+first five from Buddhist and mindfulness practice. You see every prompt once
+before any repeats, and your place carries over between launches. `⌘'` deals the
+next prompt and brings the chrome up to show it, without touching the pointer.
+
+The question sits in a box that is always two lines tall, and the theme label
+between the arrows is a fixed width, so › stays in the same place from one prompt
+to the next. The prompts themselves live in `Prompts/PromptLibrary.swift`.
+Changing how many there are deals everyone a fresh deck, because a saved place in
+the old order would point at the wrong prompts.
+
 ## Sync
 
 One page per session. You give it a title, an emoji and tags; it creates the page,

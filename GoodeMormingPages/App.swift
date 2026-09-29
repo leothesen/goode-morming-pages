@@ -59,6 +59,13 @@ struct GoodeMormingPagesApp: App {
                     NotificationCenter.default.post(name: .requestCopy, object: nil)
                 }
                 .keyboardShortcut("c", modifiers: [.command, .shift])
+
+                Divider()
+
+                Button("Next Prompt") {
+                    NotificationCenter.default.post(name: .requestNextPrompt, object: nil)
+                }
+                .keyboardShortcut("'", modifiers: .command)
             }
         }
 
