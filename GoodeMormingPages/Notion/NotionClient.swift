@@ -162,6 +162,51 @@ struct NotionClient {
         )
     }
 
+    // MARK: - Reading
+
+    /// When each page carrying `tag` was created. Dates only — never the pages'
+    /// text, which is all the widget needs and all it should ever be handed.
+    ///
+    /// With no tag column there is nothing to filter on, so every page counts.
+    func creationDates(dataSourceID: String, tagProperty: TagProperty?, tag: String) async throws -> [Date] {
+        var filter: [String: Any]?
+        if let tagProperty {
+            let match: [String: Any] = tagProperty.allowsMultiple
+                ? ["multi_select": ["contains": tag]]
+                : ["select": ["equals": tag]]
+            filter = match.merging(["property": tagProperty.key]) { current, _ in current }
+        }
+
+        var dates: [Date] = []
+        var cursor: String?
+
+        repeat {
+            var body: [String: Any] = ["page_size": 100]
+            if let filter { body["filter"] = filter }
+            if let cursor { body["start_cursor"] = cursor }
+
+            let json = try await request(path: "data_sources/\(dataSourceID)/query", method: "POST", body: body)
+            for result in json["results"] as? [[String: Any]] ?? [] {
+                if let stamp = result["created_time"] as? String, let date = Self.parseTimestamp(stamp) {
+                    dates.append(date)
+                }
+            }
+
+            cursor = (json["has_more"] as? Bool == true) ? json["next_cursor"] as? String : nil
+        } while cursor != nil
+
+        return dates
+    }
+
+    /// Notion sends `2026-10-05T07:42:00.000Z`. The fractional seconds are
+    /// optional in practice, and a formatter set up for one rejects the other.
+    static func parseTimestamp(_ string: String) -> Date? {
+        let withFraction = ISO8601DateFormatter()
+        withFraction.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = withFraction.date(from: string) { return date }
+        return ISO8601DateFormatter().date(from: string)
+    }
+
     /// Cheap credential check that doubles as the destination fetch.
     func verify() async throws -> [NotionDestination] {
         try await destinations()

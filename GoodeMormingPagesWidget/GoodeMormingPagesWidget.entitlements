@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  WidgetKit only loads sandboxed extensions. That is all this needs: no
+	  network, no Keychain, no App Group. The app, which is not sandboxed,
+	  writes the snapshot into this extension's own container, and the widget
+	  reads it from its Documents folder. See Shared/WidgetSnapshot.swift.
+
+	  No App Group because an App Group is claimed with a Team ID, and an ad-hoc
+	  signed app has none.
+	-->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+</dict>
+</plist>

@@ -147,6 +147,13 @@ struct EditorView: View {
             // Tag options live in Notion and change there. Pulling the schema on
             // launch means you never have to revisit Settings to see a new tag.
             await preferences.refreshSchema()
+            // After the schema, so the widget's days are filtered on the tag
+            // column as it is now, not as it was when Settings last saw it.
+            await WidgetBridge.shared.keepReconciling(preferences: preferences)
+        }
+        .onAppear { WidgetBridge.shared.setPrompt(deck.nextSessionPrompt) }
+        .onChange(of: deck.position) { _, _ in
+            WidgetBridge.shared.setPrompt(deck.nextSessionPrompt)
         }
         .onChange(of: showSyncSheet) { _, isShowing in
             if isShowing { Task { await preferences.refreshSchema() } }
@@ -244,6 +251,11 @@ struct EditorView: View {
                 // Habits, not decisions — offer the same choices next time.
                 if let emoji = options.emoji { preferences.lastEmoji = emoji }
                 if !options.tags.isEmpty { preferences.defaultTags = options.tags }
+
+                WidgetBridge.shared.recordSync(
+                    tags: options.tags,
+                    hasTagColumn: preferences.tagProperty != nil
+                )
 
                 // Only now is it safe to clear: Notion is the only record.
                 model.isSyncing = false

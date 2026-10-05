@@ -37,8 +37,11 @@ targets:
     platform: macOS
     sources:
       - path: GoodeMormingPages
+      - path: Shared
     dependencies:
       - package: Sparkle
+      # Embedded in Contents/PlugIns, which is where macOS looks for widgets.
+      - target: GoodeMormingPagesWidget
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: co.leothesen.GoodeMormingPages
@@ -77,6 +80,24 @@ targets:
         SUPublicEDKey: iIiC1hCpKxreAP1k91BU66Buf4k2HNK7p8WyJuKM/vc=
         SUEnableAutomaticChecks: true
         SUAllowsAutomaticUpdates: true
+
+  # The desktop widget. Sandboxed, because WidgetKit loads nothing else, and
+  # given nothing beyond that: no network, no Keychain, no App Group. The app
+  # writes Shared/WidgetSnapshot.swift's file into this extension's container.
+  GoodeMormingPagesWidget:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: GoodeMormingPagesWidget
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: co.leothesen.GoodeMormingPages.Widget
+        PRODUCT_NAME: GoodeMormingPagesWidget
+        CODE_SIGN_ENTITLEMENTS: GoodeMormingPagesWidget/GoodeMormingPagesWidget.entitlements
+        INFOPLIST_FILE: GoodeMormingPagesWidget/Info.plist
+        SKIP_INSTALL: YES
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks"
 
   GoodeMormingPagesTests:
     type: bundle.unit-test
