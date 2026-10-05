@@ -57,12 +57,15 @@ Notion blocks carry their own vertical spacing on top of the break.
 one called "Tags"). Options are read from the schema when you pick the destination
 in Settings, and default to `morning-pages`. Anything you type that Notion hasn't
 seen is created on write. The emoji and tags you chose last time are offered again.
- **Notion is the only record** —
-there is no local archive by design, so the confirm-then-clear order is
+ **Notion is the only record** of what
+you wrote — there is no local archive by design, so the confirm-then-clear order is
 load-bearing.
 
 The unsynced session is held in `~/Library/Application Support/GoodeMormingPages`
 purely so a crash doesn't cost you the morning. It is deleted on a successful sync.
+
+Beside it, `journal-days.json` remembers which days you wrote, for the widget.
+Dates only, never text: it is a cache of Notion, not a second record.
 
 ### Setting it up
 
@@ -74,6 +77,35 @@ purely so a crash doesn't cost you the morning. It is deleted on a successful sy
 3. Paste the token in Settings → Notion, hit Verify, and pick the destination.
 
 The token lives in your Keychain, never in `UserDefaults`.
+
+## The widget
+
+A small desktop widget. Until you've written today it shows the prompt the app
+will give you next, in the page's serif. Once you have, it shows the month as a
+grid of days, with your all-time count of mornings beneath it. Click it to open
+the app.
+
+It is drawn in the primary colour at a few opacities on the standard widget
+background, so macOS handles light, dark, clear and tinted. Tinting flattens
+every colour to one, so today is marked by a ring rather than a colour.
+
+**A day counts** when a page tagged "Morning pages" was created on it, by your
+Mac's midnight. A sync marks today straight away; the cache is checked against
+Notion on launch and every four hours while the app is open, and Notion wins
+except for a today it hasn't caught up with yet. A database with no tag column
+counts every page.
+
+**How the data gets there.** The widget is sandboxed and has no network, no
+Keychain and no App Group — an App Group needs a Team ID, and this app is ad-hoc
+signed. Instead the app, which is not sandboxed, writes `snapshot.json` straight
+into the widget's own container at
+`~/Library/Containers/co.leothesen.GoodeMormingPages.Widget/Data/Documents`, and
+the widget reads its Documents folder. The walkingpad app's widget works the same
+way. The app is rarely open at midnight, so the widget turns the day over itself:
+the snapshot holds dates, and a midnight timeline entry goes back to the prompt.
+
+If the widget never updates, look for `widget snapshot write failed` in Console:
+macOS privacy protection can refuse a write into another bundle's container.
 
 ## Building
 

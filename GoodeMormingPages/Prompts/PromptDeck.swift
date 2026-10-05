@@ -68,6 +68,15 @@ final class PromptDeck: ObservableObject {
         prompts[order[max(position, 0)]]
     }
 
+    /// What the first ask of the next launch will show.
+    ///
+    /// Every launch moves past the prompt you saw last, so this is always the
+    /// card after `position` — even while the current one is on screen. It is
+    /// the prompt the widget offers, so opening the app finds the same question.
+    var nextSessionPrompt: Prompt {
+        prompts[order[(position + 1) % prompts.count]]
+    }
+
     /// The prompt's place in the deck, counted from one, for the label.
     var displayPosition: Int { max(position, 0) + 1 }
 

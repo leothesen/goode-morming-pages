@@ -54,6 +54,14 @@ jobs:
             | grep -q "disable-library-validation" \
             || { echo "::error::library validation is on; the app will not load Sparkle"; exit 1; }
 
+          # The widget only exists if it is embedded where macOS looks for it, and
+          # WidgetKit silently ignores an extension that is not sandboxed.
+          WIDGET="$APP/Contents/PlugIns/GoodeMormingPagesWidget.appex"
+          [ -d "$WIDGET" ] || { echo "::error::the widget is not embedded in the app"; exit 1; }
+          codesign -d --entitlements - "$WIDGET" 2>&1 \
+            | grep -q "com.apple.security.app-sandbox" \
+            || { echo "::error::the widget is not sandboxed; WidgetKit will not load it"; exit 1; }
+
           "$APP/Contents/MacOS/GoodeMormingPages" > /tmp/smoke.log 2>&1 &
           PID=$!
           sleep 5
